@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DMartMallSoftware</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DMartMallSoftware.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+
+                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (!String.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("Id")))
+                       {
+                            @if (int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 1 || int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 5)
+                            {
+                                <li class="nav-item" style="padding-left:100px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Register" asp-action="ShowAllStaff"><p class="text-white">Staff</p></a>
+                                </li>
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Discount" asp-action="ShowAllDiscountTypes"><p class="text-white">Discount Types</p></a>
+                                </li>
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="ShowAllStock"><p class="text-white">Stock</p></a>
+                                </li>
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Demand" asp-action="ShowAllDemandsForStaff"><p class="text-white">Demands</p></a>
+                                </li>
+                                 <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="ShowAllCustomers"><p class="text-white">Customers</p></a>
+                                </li>
+
+                                <li class="nav-item dropdown" style="margin-left:400px">
+                                    <a class="nav-link dropdown-toggle float-end " asp-area="" data-bs-toggle="dropdown">
+                                        <h4 class="text-warning float-end">
+                                            Welcome: @HttpContextAccessor.HttpContext.Session.GetString("Name")
+
+                                        </h4>
+                                    </a>
+                                    <ul class="dropdown-menu " style="width:50% ">
+                                        <li><p class="text-white dropdown-item">
+                                            @Html.ActionLink("Edit My Profile", "EditMyProfile","Register",
+                                            new { Id =  @HttpContextAccessor.HttpContext.Session.GetString("Id")},
+                                            new{ @class="text-primary"})
+                                            </p>
+                                        </li>
+                                         <li><p class="text-white dropdown-item">
+                                                @Html.ActionLink("Change Password", "ChangePassword","Register",
+                                            new { Id =  @HttpContextAccessor.HttpContext.Session.GetString("Id")},
+                                            new{ @class="text-primary"})
+                                            </p>
+                                        </li>
+                                        <li><a class="text-dark dropdown-item" asp-area="" asp-controller="Register" asp-action="Logout"><p class="text-white btn btn-danger">LogOut</p></a></li>
+                                    </ul>
+                                </li>
+
+                              
+                            }
+                            else if (int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 2)
+                            {
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Discount" asp-action="ShowAllDiscountTypes"><p class="text-white">Discount Types</p></a>
+                                </li>
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="ShowAllStock"><p class="text-white">Stock</p></a>
+                                </li>
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Demand" asp-action="ShowAllDemandsForStaff"><p class="text-white">Demands</p></a>
+                                </li>
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="ShowAllCustomers"><p class="text-white">Customers</p></a>
+                                </li>
+                                <li class="nav-item dropdown" style="margin-left:400px">
+                                    <a class="nav-link dropdown-toggle float-end " asp-area="" data-bs-toggle="dropdown">
+                                        <h4 class="text-warning float-end">
+                                            Welcome: @HttpContextAccessor.HttpContext.Session.GetString("Name")
+
+                                        </h4>
+                                    </a>
+                                    <ul class="dropdown-menu " style="width:50% ">
+                                        <li>
+                                            <p class="text-white dropdown-item">
+                                                @Html.ActionLink("Edit My Profile", "EditMyProfile","Register",
+                                        new { Id =  @HttpContextAccessor.HttpContext.Session.GetString("Id")},
+                                        new{ @class="text-primary"})
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p class="text-white dropdown-item">
+                                                @Html.ActionLink("Change Password", "ChangePassword","Register",
+                                        new { Id =  @HttpContextAccessor.HttpContext.Session.GetString("Id")},
+                                        new{ @class="text-primary"})
+                                            </p>
+                                        </li>
+                                        <li><a class="text-dark dropdown-item" asp-area="" asp-controller="Register" asp-action="Logout"><p class="text-white btn btn-danger">LogOut</p></a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else if (int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 3)
+                            {
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="ShowAllStock"><p class="text-white">Stock</p></a>
+                                </li>
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="ShowAllCustomers"><p class="text-white">Customers</p></a>
+                                </li>
+                                 <li class="nav-item dropdown" style="margin-left:400px">
+                                    <a class="nav-link dropdown-toggle float-end " asp-area="" data-bs-toggle="dropdown">
+                                        <h4 class="text-warning float-end">
+                                            Welcome: @HttpContextAccessor.HttpContext.Session.GetString("Name")
+
+                                        </h4>
+                                    </a>
+                                    <ul class="dropdown-menu " style="width:50% ">
+                                        <li><p class="text-white dropdown-item">
+                                            @Html.ActionLink("Edit My Profile", "EditMyProfile","Register",
+                                            new { Id =  @HttpContextAccessor.HttpContext.Session.GetString("Id")},
+                                            new{ @class="text-primary"})
+                                            </p>
+                                        </li>
+                                         <li><p class="text-white dropdown-item">
+                                                @Html.ActionLink("Change Password", "ChangePassword","Register",
+                                            new { Id =  @HttpContextAccessor.HttpContext.Session.GetString("Id")},
+                                            new{ @class="text-primary"})
+                                            </p>
+                                        </li>
+                                        <li><a class="text-dark dropdown-item" asp-area="" asp-controller="Register" asp-action="Logout"><p class="text-white btn btn-danger">LogOut</p></a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else if (int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 4)
+                            {
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="ShowAllStock"><p class="text-white">Stock</p></a>
+                                </li>
+                                <li class="nav-item dropdown" style="margin-left:400px">
+                                    <a class="nav-link dropdown-toggle float-end " asp-area="" data-bs-toggle="dropdown">
+                                        <h4 class="text-warning float-end">
+                                            Welcome: @HttpContextAccessor.HttpContext.Session.GetString("Name")
+
+                                        </h4>
+                                    </a>
+                                    <ul class="dropdown-menu " style="width:50% ">
+                                        <li>
+                                            <p class="text-white dropdown-item">
+                                                @Html.ActionLink("Edit My Profile", "EditMyProfile","Register",
+                                        new { Id =  @HttpContextAccessor.HttpContext.Session.GetString("Id")},
+                                        new{ @class="text-primary"})
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p class="text-white dropdown-item">
+                                                @Html.ActionLink("Change Password", "ChangePassword","Register",
+                                        new { Id =  @HttpContextAccessor.HttpContext.Session.GetString("Id")},
+                                        new{ @class="text-primary"})
+                                            </p>
+                                        </li>
+                                        <li><a class="text-dark dropdown-item" asp-area="" asp-controller="Register" asp-action="Logout"><p class="text-white btn btn-danger">LogOut</p></a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else if (int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 6)
+                            {
+                                <li class="nav-item" style="padding-left:50px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Dealer" asp-action="ShowAllDemandsForDealer"><p class="text-white">New Requests From D-Mart</p></a>
+                                </li>
+                                <li class="nav-item dropdown" style="margin-left:400px">
+                                    <a class="nav-link dropdown-toggle float-end " asp-area="" data-bs-toggle="dropdown">
+                                        <h4 class="text-warning float-end">
+                                            Welcome: @HttpContextAccessor.HttpContext.Session.GetString("Name")
+
+                                        </h4>
+                                    </a>
+                                    <ul class="dropdown-menu " style="width:50% ">
+                                        <li>
+                                            <p class="text-white dropdown-item">
+                                                @Html.ActionLink("Edit My Profile", "EditMyProfile","Register",
+                                        new { Id =  @HttpContextAccessor.HttpContext.Session.GetString("Id")},
+                                        new{ @class="text-primary"})
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p class="text-white dropdown-item">
+                                                @Html.ActionLink("Change Password", "ChangePassword","Register",
+                                        new { Id =  @HttpContextAccessor.HttpContext.Session.GetString("Id")},
+                                        new{ @class="text-primary"})
+                                            </p>
+                                        </li>
+                                        <li><a class="text-dark dropdown-item" asp-area="" asp-controller="Register" asp-action="Logout"><p class="text-white btn btn-danger">LogOut</p></a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else {
+                                <li class="nav-item" style="padding-left:750px">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Register" asp-action="Logout"><p class="text-white">LogOut <p class="text-danger">
+                                        (You are not authorised staff member. Please Contact to Admin...)</p></p></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark">
+                                        <p class="text-white">
+                                            Welcome: @HttpContextAccessor.HttpContext.Session.GetString("Name")
+
+                                        </p>
+                                    </a>
+                                </li>
+                            }
+                        }
+                        @if (String.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("Id")))
+                       {
+                          
+                           <li class="nav-item ">
+                                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><h1 class="text-white">D-Mart Mall Software</h1></a>
+                            </li>
+                            <li class="nav-item " style="margin-left:800px" >
+                                <a class="nav-link" asp-area="" asp-controller="Register" asp-action="SignIn"><p class="text-white btn btn-primary">SignIn</p></a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" asp-area="" asp-controller="Register" asp-action="Create"><p class="text-white btn btn-success">Register</p></a>
+                            </li>
+                  
+                       }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - DMartMallSoftware - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

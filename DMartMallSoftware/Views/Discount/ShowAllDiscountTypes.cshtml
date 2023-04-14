@@ -1,0 +1,53 @@
+﻿@model IEnumerable<DMartMallSoftware.Models.DiscountModel>
+
+@{
+    ViewData["Title"] = "ShowAllDiscountTypes";
+}
+
+<h1>All Discount Types</h1>
+<hr />
+<p>
+    <a class ="btn btn-primary" asp-action="AddDiscountType">Add New Discount Type</a>
+</p>
+<hr />
+
+<div class="col-md-4 d-block m-auto">
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th >
+                @Html.DisplayNameFor(model => model.SrNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountPerc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddedBy)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SrNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountPerc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddedBy)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditDiscountType", new { Id=item.Id  }, new{ @class="btn btn-primary"})
+                        @Html.ActionLink("Delete", "DeleteConfirm", new { Id=item.Id }, new{ @class="btn btn-danger"})
+                </td>
+              
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+

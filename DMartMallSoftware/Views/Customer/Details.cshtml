@@ -1,0 +1,132 @@
+﻿@model DMartMallSoftware.Models.CustomerModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+  
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MobileNo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MobileNo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class="col-sm-12">
+           Cart Products:
+        </dt>
+       
+        <dd class="col-sm-12">
+            @{
+                var ctm = Model.Cartdetails;
+
+                
+            <div class="mt-3">
+                    <p>
+                        <a asp-action="AddProduct" asp-route-id="@Model.Id" asp>Create New</a>
+                    </p>
+                <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>SrNo</th>
+            <th>Name</th>
+            <th>Price </th>
+            <th>Discount</th>
+            <th>Quentity</th>
+            <th>Total Amount</th>
+            <th>Total Discount</th>
+            <th>Net Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in ctm) {
+        <tr>
+            <th>
+                @Html.DisplayFor(modelItem => item.SrNo)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quentity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalDiscount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NetAmount)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { Id=item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { Id=item.Id })
+            </td>
+        </tr>
+}
+<tr>
+<th colspan="5">Total:
+</th>
+                 <th>
+                            @Html.DisplayFor(model => model.SubTotal)
+                  </th>
+                    <th>
+                                    @Html.DisplayFor(model => model.TotalDiscount)
+                    </th>
+                    <th>
+                                    @Html.DisplayFor(model => model.GrandTotal)
+                    </th>
+                                <td>
+                    <dt >
+                                        @Html.DisplayNameFor(model => model.Remark):
+                                        @Html.DisplayFor(model => model.Remark)
+                    </dt>
+                   </td>
+</tr>
+    </tbody>
+</table>
+            </div>
+        }
+        </dd>
+
+        
+        
+       
+        
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="ShowAllCustomers">Back to List</a>
+</div>
+
+

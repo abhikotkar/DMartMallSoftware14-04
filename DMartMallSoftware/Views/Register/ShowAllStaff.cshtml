@@ -1,0 +1,122 @@
+﻿@model IEnumerable<DMartMallSoftware.Models.StaffModel>
+
+@{
+    ViewData["Title"] = "ShowAllStaff";
+    
+
+}
+
+<h1>All Staff Members</h1>
+<hr/>
+<div class="row">
+    <div class="col-md-12">
+        <form method="get" action="ShowAllStaff">
+            <table class="table text-center">
+                <tr>
+                    <td class=""><input type="text" id="Name" name="Name" class="form-control" placeholder="Enter Name..." /></td>
+
+                    <td class="">
+                        <select class="form-control" id="TextId" name="TextId" asp-items="@(new SelectList(ViewBag.UTypes,"Id","UserType"))">
+                        </select>
+                    </td>
+                    <td class="">
+                        <select name="IsConfirmed" id="IsConfirmed" class="form-control" >
+                            <option value="Select">Is Confirmed</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </td>
+                    <td class=""><input type="submit" class="btn btn-primary ms-5" name="Search" value="Search" /></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<br />
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SrNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MobileNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsConfirmed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AprovedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JoinDate)
+            </th>
+            
+            <th>Action</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SrNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MobileNo)
+            </td>
+          
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserType)
+            </td>
+                <td>
+                    @Html.CheckBoxFor(modelItem => item.IsConfirmed, new { Style = "vertical-align:3px" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AprovedBy)
+                </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.JoinDate)
+            </td>
+           
+            <td>
+                    @Html.ActionLink("Edit", "Edit", new { Id = item.Id}, new{ @class="btn btn-primary"})
+                    @Html.ActionLink("Delete", "Delete", new { Id = item.Id }, new{ @class="btn btn-danger"})
+            </td>
+        </tr>
+}
+       
+
+       
+    </tbody>
+</table>

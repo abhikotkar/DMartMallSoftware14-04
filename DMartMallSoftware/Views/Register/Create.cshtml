@@ -1,0 +1,105 @@
+﻿@model DMartMallSoftware.Models.StaffModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Register Staff Member</h1>
+
+
+
+
+<hr />
+<div class="row">
+    <div class="col-md-10  d-block m-auto">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+             <div class="card shadow">
+
+        <div class="card-body ">
+                    <div class="col-md-12 row">
+                        <div class="form-group col-md-6 ">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6 float-end">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row">
+                        <div class="form-group col-md-6 ">
+                            <label asp-for="Gender" class="control-label"></label>
+                            <select asp-for="GenderId" class="form-control" asp-items="@(new SelectList(ViewBag.Genders,"Id","Gender"))">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 float-end">
+                            <label asp-for="MobileNo" class="control-label"></label>
+                            <input asp-for="MobileNo" class="form-control" />
+                            <span asp-validation-for="MobileNo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 row">
+                        <div class="form-group col-md-6 ">
+                            <label asp-for="Address" class="control-label"></label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6 float-end">
+                            <label asp-for="UserType" class="control-label"></label>
+                            <select asp-for="UserTypeId" class="form-control" asp-items="@(new SelectList(ViewBag.UTypes,"Id","UserType"))">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 row">
+                        <div class="form-group col-md-6 ">
+                            <label asp-for="Quetion" class="control-label"></label>
+                            <select asp-for="QuetionId" class="form-control" asp-items="@(new SelectList(ViewBag.Quetions,"Id","Quetion"))">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 float-end ">
+                            <label asp-for="Answer" class="control-label"></label>
+                            <input asp-for="Answer" class="form-control" />
+                            <span asp-validation-for="Answer" class="text-danger"></span>
+                        </div>
+                       
+                    </div>
+                        <div class="col-md-12 row">
+                        <div class="form-group col-md-6 ">
+                            <label asp-for="Password" class="control-label"></label>
+                            <input asp-for="Password" class="form-control " />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6 float-end ">
+                            <label asp-for="ConfirmPassword" class="control-label"></label>
+                            <input asp-for="ConfirmPassword" class="form-control " />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+            </div>
+                <div class="card-footer col-md-12 row d-block m-auto">
+                    <input type="submit" value="Register" class="btn btn-primary  col-md-5" />
+                    <a asp-controller="Register" asp-action="SignIn"><p class=" float-end">Go For SignIn</p></a>
+                </div>
+            
+               
+          
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-controller="Home" asp-action="Index">Back To Home...</a>
+</div>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

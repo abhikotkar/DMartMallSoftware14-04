@@ -1,0 +1,70 @@
+﻿@model DMartMallSoftware.Models.StaffModel
+
+@{
+    ViewData["Title"] = "EditMyProfile";
+}
+
+<h1>Edit My Profile</h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4 d-block m-auto">
+        <form asp-action="EditMyProfile">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="card shadow">
+
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div><div class="form-group">
+                        <label asp-for="MobileNo" class="control-label"></label>
+                        <input asp-for="MobileNo" class="form-control" />
+                        <span asp-validation-for="MobileNo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Quetion" class="control-label"></label>
+                        <select asp-for="QuetionId" class="form-control" asp-items="@(new SelectList(ViewBag.Quetions,"Id","Quetion"))">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Answer" class="control-label"></label>
+                        <input asp-for="Answer" class="form-control " />
+                        <span asp-validation-for="Answer" class="text-danger"></span>
+                    </div>
+                    
+
+                </div>
+                <div class="card-footer col-md-12  row d-block m-auto">
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <a class="mt-3" asp-controller="Home" asp-action="Index"><p class=" float-end">Back to Home</p></a>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
