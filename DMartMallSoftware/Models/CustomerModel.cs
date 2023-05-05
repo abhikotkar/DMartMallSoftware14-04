@@ -15,7 +15,10 @@ namespace DMartMallSoftware.Models
         public List<CartModel>? Cartdetails { get; set; }
         public float SubTotal { get; set; }
         public float TotalDiscount { get; set; }
+        public float TotalAmt { get; set; }
+        public float PayAmt { get; set; }
         public float GrandTotal { get; set; }
         public string? Remark { get; set; }
+        public int RemarkId { get; set; }
     }
 }

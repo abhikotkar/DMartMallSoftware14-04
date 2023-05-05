@@ -1,57 +1,33 @@
-﻿@model IEnumerable<DMartMallSoftware.Models.CustomerModel>
-
+﻿
+@model IEnumerable<DMartMallSoftware.Models.CustomerModel>
 
 @{
     ViewData["Title"] = "ShowAllCustomers";
 }
 
-<h1>ShowAllCustomers</h1>
-
+<h1>Show All Customers</h1>
+<hr/>
 <p>
-    <a asp-action="AddCustomer">Add New Customer</a>
+    <a class="btn btn-primary" asp-controller="Customer" asp-action="AddCustomer">Add New Customer</a>
 </p>
 
-     <div class="row">
-    <div class="col-md-4">
-        @*<form asp-action="Search">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                   
-                <input type="text" class="form-control" id="abc" />
-                
-            </div>
-            <br />
-            <div class="form-group">
-                @Html.ActionLink("Search", "ShowAllCustomers", new { MobileNo="abc" })
-            </div>
-        </form>*@
-
+<hr />
+<div class="row">
+    <div class="col-md-12">
         <form method="get" action="ShowAllCustomers">
-            <table>
-                
+            <table class="table text-center">
                 <tr>
-                   
-                    <td><input type="text" id="searchText" name="searchText" class="form-control" /></td>
-                    <td><input type="submit" class="btn btn-primary ms-4" name="Search" value="Search" /></td>
+                    <td class=""><input type="text" id="searchText" name="searchText" class="form-control" placeholder="Enter Mobile No..." /></td>
+
+                    <td class=""><input type="submit" class="btn btn-primary ms-5" name="Search" value="Search" /></td>
                 </tr>
-               
             </table>
         </form>
-
-        @*@using (Html.BeginForm("ShowAllCustomers", "Customer"))
-        {
-            <input type="text" name="id" />
-            <input type="submit" value="Check your value!">
-        }*@
-
-        
-
     </div>
-    </div>
+</div>
+<br />
 
-
-
-<table class="table">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>
@@ -67,13 +43,13 @@
                 @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SubTotal)
+                @Html.DisplayNameFor(model => model.TotalAmt)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TotalDiscount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GrandTotal)
+                @Html.DisplayNameFor(model => model.PayAmt)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Remark)
@@ -82,43 +58,46 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SrNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MobileNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubTotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalDiscount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GrandTotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Remark)
-            </td>
-            <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SrNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MobileNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalAmt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalDiscount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PayAmt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Remark)
+                </td>
+                <td>
 
-                @if(item.Remark == "Pending")
-                {
-                    @Html.ActionLink("Edit", "Edit", new { Id=item.Id }) 
-                    <span>|</span>
-                }
-                @Html.ActionLink("Details", "Details", new { Id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { Id=item.Id })
-            </td>
-        </tr>
-}
+                   
+                        @Html.ActionLink("Edit", "EditCustomerDetails", new { Id=item.Id }, new{ @class="btn btn-primary"})
+                    
+                    @Html.ActionLink("Details", "Details", new { Id=item.Id }, new{ @class="btn btn-success"}) 
+                     @if (item.RemarkId == 1)
+                    {
+                        @Html.ActionLink("Cancel Bill", "CancelCustomerBill", new { Id=item.Id }, new{ @class="btn btn-danger"})
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+

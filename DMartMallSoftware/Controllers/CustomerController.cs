@@ -63,8 +63,10 @@ namespace DMartMallSoftware.Controllers
                 return View();
             }
         }
-        public ActionResult AddProduct()
+        public ActionResult AddProduct(int Id)
         {
+            ViewBag.custId = Id;
+            LoadUDl();
             LoadDDl();
             return View();
         }
@@ -81,6 +83,32 @@ namespace DMartMallSoftware.Controllers
                     return RedirectToAction("Details", "Customer", new { Id=Id});
                 }
                 else
+                    return RedirectToAction("AddProduct", "Customer");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult EditCustomerDetails(int Id)
+        {
+            var model = cd.GetCustomerById(Id);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditCustomerDetails(CustomerModel customer)
+        {
+            try
+            {
+                int result = cd.UpdateCustomerDetails(customer);
+                if (result == 1)
+                {
+                    return RedirectToAction(nameof(ShowAllCustomers));
+                }
+                else
                     return View();
             }
             catch
@@ -89,7 +117,11 @@ namespace DMartMallSoftware.Controllers
             }
         }
 
-
+        public ActionResult CancelCustomerBill(int Id)
+        {
+            var model = cd.CancelCustomerBill(Id);
+            return RedirectToAction("ShowAllCustomers", "Customer");
+        }
         private void LoadDDl()
         {
             try
@@ -98,6 +130,21 @@ namespace DMartMallSoftware.Controllers
                 product = cd.LoadProducts().ToList();
                 product.Insert(0, new ProductModel { Id = 0, Name = "Please Select Product",Price=0 });
                 ViewBag.DiscountTypes = product;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void LoadUDl()
+        {
+            try
+            {
+                List<UnitModel> unit = new List<UnitModel>();
+                unit = cd.LoadUnit().ToList();
+                unit.Insert(0, new UnitModel { Id = 0, Unit = "Please Select" });
+                ViewBag.UnitTypes1 = unit;
             }
             catch (Exception ex)
             {

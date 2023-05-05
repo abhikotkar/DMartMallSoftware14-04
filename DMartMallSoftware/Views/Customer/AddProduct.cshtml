@@ -1,4 +1,5 @@
-﻿@model DMartMallSoftware.Models.CartModel
+﻿
+@model DMartMallSoftware.Models.CartModel
 
 @{
     ViewData["Title"] = "AddProduct";
@@ -6,37 +7,54 @@
 
 <h1>Add Product</h1>
 
-
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 d-block m-auto">
         <form asp-action="AddProduct">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <select asp-for="ProductId" class="form-control" asp-items="@(new SelectList(ViewBag.DiscountTypes,"Id","Name","Price"))">
-                
-                </select>
+            <div class="card shadow">
 
-               
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <select asp-for="ProductId" class="form-control" asp-items="@(new SelectList(ViewBag.DiscountTypes,"Id","Name","Price"))">
+                        </select>
+
+
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Quantity" class="control-label"></label>
+                        <input asp-for="Quantity" class="form-control" />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Unit" class="control-label"></label>
+                        <select asp-for="UnitId" class="form-control" asp-items="@(new SelectList(ViewBag.UnitTypes1,"Id","Unit"))">
+                        </select>
+                    </div>
+
+                </div>
+                <div class="card-footer col-md-12  row d-block m-auto">
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                        @Html.ActionLink("Back to List", "Details","Customer",new {Id=(ViewBag.custId)},  new { @class = "float-end mb-4" })
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Quentity" class="control-label"></label>
-                <input asp-for="Quentity" class="form-control" />
-                <span asp-validation-for="Quentity" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+
+
+
         </form>
     </div>
 </div>
-<br />
-<div>
-    <a asp-action="Details">Back to List</a>
-</div>
+
+
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
