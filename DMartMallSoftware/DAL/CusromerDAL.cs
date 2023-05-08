@@ -154,7 +154,42 @@ namespace DMartMallSoftware.DAL
             //con.Close();
             return clist;
         }
-
+        public CartModel GetCartItemById(int Id)
+        {
+            CartModel c = new CartModel();
+            string qry1 = @"Select c.Id,c.ProductId,u.Unit,c.CustId,
+			                                            s.Name,s.Price,s.DiscountId,d.DiscountPerc,c.Quantity,c.TotalAmt,
+                                                        c.TotalDiscount,c.NetAmt,c.Discount from tblStock s 
+			                                            left join tblCart c on s.Id=c.ProductId 
+			                                            left join tblDiscount d on s.DiscountId=d.Id
+			                                            left join tblUnit u on s.UnitId=u.Id
+			                                             where c.Id=@Id and c.IsDeleted=0";
+            cmd = new SqlCommand(qry1, con);
+            cmd.Parameters.AddWithValue("@Id", Id);
+            con.Open();
+            dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+            {
+                if (dr.Read())
+                {
+                    c.Id = Convert.ToInt32(dr["Id"]);
+                    c.CustId = Convert.ToInt32(dr["CustId"]);
+                    c.ProductId = Convert.ToInt32(dr["ProductId"]);
+                    c.Unit = dr["Unit"].ToString();
+                    c.Name = dr["Name"].ToString();
+                    c.Price = (float)Convert.ToDouble(dr["Price"]);
+                    c.DiscountId = Convert.ToInt32(dr["DiscountId"]);
+                    c.DiscountPerc = (float)Convert.ToDouble(dr["DiscountPerc"]);
+                    c.Quantity = Convert.ToInt32(dr["Quantity"]);
+                    c.TotalAmt = (float)Convert.ToDouble(dr["TotalAmt"]);
+                    c.TotalDiscount = (float)Convert.ToDouble(dr["TotalDiscount"]);
+                    c.NetAmt = (float)Convert.ToDouble(dr["NetAmt"]);
+                    c.Discount = (float)Convert.ToDouble(dr["Discount"]);
+                }
+            }
+            //con.Close();
+            return c;
+        }
         public int AddCustomer(CustomerModel customer)
         {
 

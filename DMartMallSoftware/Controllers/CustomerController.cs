@@ -22,7 +22,7 @@ namespace DMartMallSoftware.Controllers
        
         public ActionResult ShowAllCustomers(string? searchText)
         {
-          
+                        
             var model = cd.GetAllCustomers(searchText);
             return View(model);
         }
@@ -116,6 +116,15 @@ namespace DMartMallSoftware.Controllers
                 return View();
             }
         }
+
+        public ActionResult EditCartItem(int Id)
+        {
+            LoadUDl();
+            var model = cd.GetCartItemById(Id);
+            return View(model);
+        }
+
+
 
         public ActionResult CancelCustomerBill(int Id)
         {

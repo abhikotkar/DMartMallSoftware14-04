@@ -228,7 +228,7 @@
                                         @Html.DisplayFor(modelItem => item.NetAmt)
                                     </td>
                                     <td>
-                                        @Html.ActionLink("Edit", "Edit", new { Id=item.Id }, new{ @class="btn btn-primary"}) 
+                                        @Html.ActionLink("Edit", "EditCartItem", new { Id=item.Id }, new{ @class="btn btn-primary"})
                                         @Html.ActionLink("Delete", "Delete", new { Id=item.Id }, new{ @class="btn btn-danger"})
                                     </td>
                                 </tr>

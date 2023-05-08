@@ -8,6 +8,7 @@ namespace DMartMallSoftware.Models
         public int SrNo { get; set; }
         public int Id { get; set; }
         public int OrderId { get; set; }
+        public int CustId { get; set; }
         public int ProductId { get; set; }
         public int UnitId { get; set; }
 
