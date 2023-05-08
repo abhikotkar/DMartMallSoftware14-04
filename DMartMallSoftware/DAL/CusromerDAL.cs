@@ -437,13 +437,25 @@ namespace DMartMallSoftware.DAL
         {
             string qry = "update tblCustomer set IsDeleted=1,ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate where Id=@Id";
             cmd = new SqlCommand(qry, con);
-
+            var ModifiedDate = DateTime.Now;
             cmd.Parameters.AddWithValue("@Id", Id);
             cmd.Parameters.AddWithValue("@ModifiedBy", HttpContext.Session.GetString("Id"));
-            cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
+            cmd.Parameters.AddWithValue("@ModifiedDate", ModifiedDate);
             con.Open();
             int result = cmd.ExecuteNonQuery();
             con.Close();
+            if(result>=1)
+            {
+                string qry1 = "update tblCart set IsDeleted=1,ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate where CustId=@CustId";
+                cmd = new SqlCommand(qry1, con);
+
+                cmd.Parameters.AddWithValue("@CustId", Id);
+                cmd.Parameters.AddWithValue("@ModifiedBy", HttpContext.Session.GetString("Id"));
+                cmd.Parameters.AddWithValue("@ModifiedDate", ModifiedDate);
+                con.Open();
+                result = cmd.ExecuteNonQuery();
+                con.Close();
+            }
             return result;
         }
         public List<ProductModel> LoadProducts()
