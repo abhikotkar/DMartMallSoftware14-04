@@ -117,14 +117,33 @@ namespace DMartMallSoftware.Controllers
             }
         }
 
-        public ActionResult EditCartItem(int Id)
+        public ActionResult EditCartItem(int Id,int CId)
         {
+            ViewBag.CustIds = CId;
             LoadUDl();
             var model = cd.GetCartItemById(Id);
             return View(model);
         }
 
+        /*[HttpPost]
+        public ActionResult EditCartItem(CartModel cart)
+        {
 
+            try
+            {
+                int Id = cd.EditCartItem(cart);
+                if (Id >= 1)
+                {
+                    return RedirectToAction("Details", "Customer", new { Id = Id });
+                }
+                else
+                    return RedirectToAction("EditCartItem", "Customer");
+            }
+            catch
+            {
+                return View();
+            }
+        }*/
 
         public ActionResult CancelCustomerBill(int Id)
         {
