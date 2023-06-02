@@ -18,7 +18,7 @@
 
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
-                        <select asp-for="ProductId" class="form-control" asp-items="@(new SelectList(ViewBag.DiscountTypes,"Id","Name","Price"))">
+                        <select asp-for="Name" class="form-control" asp-items="@(new SelectList(ViewBag.DiscountTypes,"Name","Name"))">
                         </select>
 
 

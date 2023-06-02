@@ -27,9 +27,11 @@ namespace DMartMallSoftware.DAL
                                                                             ,TotalAmt,TotalDiscount,PayAmt,RemarkId,
                                                                             r.Remark from tblCustomer left join tblRemark r 
 			                                                                on tblCustomer.RemarkId=r.Id where tblCustomer.IsDeleted=0 
-			                                                                and (MobileNo like '%'+@MobileNo+'%' or @MobileNo is null ) ";
+			                                                                and (MobileNo like '%'+@MobileNo+'%' or @MobileNo is null ) 
+                                                                            and tblCustomer.CreatedBy =@CreatedBy";
             cmd = new SqlCommand(qry, con);
             cmd.Parameters.AddWithValue("@MobileNo", MobileNo);
+            cmd.Parameters.AddWithValue("@CreatedBy", HttpContext.Session.GetString("Id"));
             con.Open();
             dr = cmd.ExecuteReader();
             if (dr.HasRows)
@@ -230,6 +232,25 @@ namespace DMartMallSoftware.DAL
         public int AddProduct(CartModel cart, int CustId)
         {
             int result = 0;
+            if (cart.ProductId == 0)
+            {
+                string query = @"select Id from tblStock where Name=@Name  and UnitId=@UnitId and IsDeleted=0";
+                cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Name", cart.Name);
+                cmd.Parameters.AddWithValue("@UnitId", cart.UnitId);
+                con.Open();
+                dr = cmd.ExecuteReader();
+
+                if (dr.HasRows)
+                {
+                    if (dr.Read())
+                    {
+                        cart.ProductId = Convert.ToInt32(dr["Id"]);
+                    }
+                    
+                }
+            }
+            con.Close();
             string query2 = @"select 1 from tblStock where Id=@ProductId  and UnitId=@UnitId and IsDeleted=0";
             cmd = new SqlCommand(query2, con);
             cmd.Parameters.AddWithValue("@ProductId", cart.ProductId);
@@ -426,10 +447,130 @@ namespace DMartMallSoftware.DAL
                         con.Close();
                     }
                 }
+                con.Close();
             }
+            con.Close() ;
             return result;
         }
 
+        public int EditCartItem(CartModel cart)
+        {
+            float subtotal;
+            float grandtotal;
+            float totaldiscount;
+            float totalamt=0;
+            float netamt=0;
+            float totaldisc= 0;
+            int qua= 0;
+            int quantity = 0;
+            int productid= 0;
+            int custid = 0;
+            int result = 0;
+            var query = @"select Id,TotalAmt,TotalDiscount,NetAmt,CustId,Quantity,ProductId from tblcart where Id=@Id and IsDeleted=0";
+            cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@Id", cart.Id);
+            con.Open();
+            dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+            {
+                if (dr.Read())
+                {
+                    custid = Convert.ToInt32(dr["CustId"]);
+                    totalamt = (float)Convert.ToDouble(dr["TotalAmt"]);
+                    netamt = (float)Convert.ToDouble(dr["NetAmt"]);
+                    totaldisc = (float)Convert.ToDouble(dr["TotalDiscount"]);
+                    qua = Convert.ToInt32(dr["Quantity"]);
+                    productid = Convert.ToInt32(dr["ProductId"]);
+                }
+            }
+            con.Close();
+            int Id = cart.Id;
+            var qrys2 = @"update tblCart set IsDeleted=1 where Id=@Id";
+            cmd = new SqlCommand(qrys2, con);
+            cmd.Parameters.AddWithValue("@Id", Id);
+            con.Open();
+            result = cmd.ExecuteNonQuery();
+            con.Close();
+            //cart.ProductId = productid;
+            if(cart.Name!=null && (cart.UnitId!=null|| cart.UnitId!=0))
+                result = AddProduct(cart, custid);
+            if (result >= 1)
+            {
+                var countquery = "Select Quantity from tblStock where Id=@Id";
+                cmd = new SqlCommand(countquery, con);
+                cmd.Parameters.AddWithValue("@Id", productid);
+                con.Open();
+                dr = cmd.ExecuteReader();
+
+                if (dr.HasRows)
+                {
+                    if (dr.Read())
+                    {
+                        quantity = Convert.ToInt32(dr["Quantity"]);
+                    }
+                }
+
+                con.Close();
+                string query1 = @"select TotalAmt,TotalDiscount,PayAmt from tblCustomer where Id=@Id and RemarkId=1 and IsDeleted=0 ";
+                cmd = new SqlCommand(query1, con);
+                cmd.Parameters.AddWithValue("@Id", custid);
+                con.Open();
+                dr = cmd.ExecuteReader();
+
+                if (dr.HasRows)
+                {
+                    if (dr.Read())
+                    {
+                        subtotal = (float)Convert.ToDouble(dr["TotalAmt"]);
+                        grandtotal = (float)Convert.ToDouble(dr["PayAmt"]);
+                        totaldiscount = (float)Convert.ToDouble(dr["TotalDiscount"]);
+
+                        subtotal = subtotal - totalamt;
+                        grandtotal = grandtotal - netamt;
+                        totaldiscount = totaldiscount - totaldisc;
+                        quantity = quantity + qua;
+                        con.Close();
+                        var updatecountquery = "update tblStock set quantity=@quantity where Id=@Id";
+                        cmd = new SqlCommand(updatecountquery, con);
+                        cmd.Parameters.AddWithValue("@quantity", quantity);
+                        cmd.Parameters.AddWithValue("@Id", productid);
+                        con.Open();
+                        result = cmd.ExecuteNonQuery();
+                        con.Close();
+
+                        var qry2 = @"	update tblCustomer set TotalAmt=@TotalAmt,PayAmt=@PayAmt,
+                                    Totaldiscount=@Totaldiscount where Id=@Id";
+                        cmd = new SqlCommand(qry2, con);
+                        cmd.Parameters.AddWithValue("@TotalAmt", subtotal);
+                        cmd.Parameters.AddWithValue("@PayAmt", grandtotal);
+                        cmd.Parameters.AddWithValue("@Totaldiscount", totaldiscount);
+                        cmd.Parameters.AddWithValue("@Id", custid);
+                        con.Open();
+                        result = cmd.ExecuteNonQuery();
+                        if (result == 1)
+                            result = custid;
+                        con.Close();
+
+                    }
+                }
+                con.Close();
+               
+                
+            }
+            else
+            {
+                var qrys5 = @"update tblCart set IsDeleted=0 where Id=@Id";
+                cmd = new SqlCommand(qrys5, con);
+                cmd.Parameters.AddWithValue("@Id", Id);
+                con.Open();
+                result = cmd.ExecuteNonQuery();
+                if (result == 1)
+                    result = custid;
+                con.Close();
+            }
+            return result;
+        }
+             
         public int UpdateCustomerDetails(CustomerModel customer)
         {
             int result = 0;
@@ -493,10 +634,36 @@ namespace DMartMallSoftware.DAL
             }
             return result;
         }
+
+        public int RemoveCartItem(int Id)
+        {
+            string qry = "update tblCustomer set IsDeleted=1,ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate where Id=@Id";
+            cmd = new SqlCommand(qry, con);
+            var ModifiedDate = DateTime.Now;
+            cmd.Parameters.AddWithValue("@Id", Id);
+            cmd.Parameters.AddWithValue("@ModifiedBy", HttpContext.Session.GetString("Id"));
+            cmd.Parameters.AddWithValue("@ModifiedDate", ModifiedDate);
+            con.Open();
+            int result = cmd.ExecuteNonQuery();
+            con.Close();
+            if (result >= 1)
+            {
+                string qry1 = "update tblCart set IsDeleted=1,ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate where CustId=@CustId";
+                cmd = new SqlCommand(qry1, con);
+
+                cmd.Parameters.AddWithValue("@CustId", Id);
+                cmd.Parameters.AddWithValue("@ModifiedBy", HttpContext.Session.GetString("Id"));
+                cmd.Parameters.AddWithValue("@ModifiedDate", ModifiedDate);
+                con.Open();
+                result = cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            return result;
+        }
         public List<ProductModel> LoadProducts()
         {
             List<ProductModel> product = new List<ProductModel>();
-            string qry = "select Id,Name,Price from tblStock where IsDeleted=0 and Quantity>0";
+            string qry = "select distinct Name from tblStock where IsDeleted=0 and Quantity>0 order by Name ";
             cmd = new SqlCommand(qry, con);
             con.Open();
             dr = cmd.ExecuteReader();
@@ -506,9 +673,7 @@ namespace DMartMallSoftware.DAL
                 {
                     product.Add(new ProductModel
                     {
-                        Id = dr.GetInt32("Id"),
-                        Name = dr.GetString("Name"),
-                        Price = (float)dr.GetDouble("Price")
+                        Name = dr.GetString("Name")
                     });
                 }
 

@@ -117,12 +117,34 @@ namespace DMartMallSoftware.Controllers
             }
         }
 
+
+
         public ActionResult EditCartItem(int Id,int CId)
         {
             ViewBag.CustIds = CId;
             LoadUDl();
             var model = cd.GetCartItemById(Id);
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditCartItem(CartModel cart)
+        {
+            try
+            {
+                int Id = cd.EditCartItem(cart);
+                if (Id >= 1)
+                {
+                    return RedirectToAction("Details", "Customer", new { Id = Id });
+                }
+                else
+                    return RedirectToAction("Details", "Customer", new { Id = Id });
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         /*[HttpPost]
@@ -149,6 +171,12 @@ namespace DMartMallSoftware.Controllers
         {
             var model = cd.CancelCustomerBill(Id);
             return RedirectToAction("ShowAllCustomers", "Customer");
+        } 
+        
+        public ActionResult RemoveCartItem(CartModel cart, int CId)
+        {
+            var model = cd.EditCartItem(cart);
+            return RedirectToAction("Details", "Customer", new { Id = CId });
         }
         private void LoadDDl()
         {
@@ -156,7 +184,7 @@ namespace DMartMallSoftware.Controllers
             {
                 List<ProductModel> product = new List<ProductModel>();
                 product = cd.LoadProducts().ToList();
-                product.Insert(0, new ProductModel { Id = 0, Name = "Please Select Product",Price=0 });
+                product.Insert(0, new ProductModel {Name = "Please Select Product"});
                 ViewBag.DiscountTypes = product;
             }
             catch (Exception ex)

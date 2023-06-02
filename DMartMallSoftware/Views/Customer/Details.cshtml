@@ -178,7 +178,7 @@
                 
             <div class="mt-3">
                     <p>
-                        @Html.ActionLink("Create New", "AddProduct","Customer", new { Id =  Model.Id }, new { @class = "btn btn-primary float-end mb-4" })
+                        @Html.ActionLink("Add New", "AddProduct","Customer", new { Id =  Model.Id }, new { @class = "btn btn-primary float-end mb-4" })
                        
                     </p>
                     <table class="table table-bordered table-striped">
@@ -189,7 +189,7 @@
                                 <th>Unit</th>
                                 <th>Price </th>
                                 <th>Discount</th>
-                                <th>Quentity</th>
+                                <th>Quantity</th>
                                 <th>Total Amount</th>
                                 <th>Total Discount</th>
                                 <th>Net Amount</th>
@@ -229,13 +229,16 @@
                                     </td>
                                     <td>
                                         @Html.ActionLink("Edit", "EditCartItem", new { Id=item.Id,CId=Model.Id }, new{ @class="btn btn-primary"})
-                                        @Html.ActionLink("Delete", "Delete", new { Id=item.Id }, new{ @class="btn btn-danger"})
+                                        @Html.ActionLink("Remove", "RemoveCartItem", new { Id=item.Id,CId=Model.Id }, new{ @class="btn btn-danger"})
                                     </td>
                                 </tr>
                             }
                             <tr>
-                                <th colspan="6">
+                                <th colspan="5">
                                     Total:
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(model => model.TotalAmt)
                                 </th>
                                 <th>
                                     @Html.DisplayFor(model => model.TotalAmt)
@@ -266,6 +269,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="ShowAllCustomers">Back to List</a>
+    <a asp-action="ShowAllCustomers">Back to Customer List</a>
 </div>
                    
