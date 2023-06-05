@@ -19,12 +19,12 @@ namespace DMartMallSoftware.DAL
 
         }
 
-        public List<CustomerModel> GetAllCustomers(string? MobileNo)
+        /*public List<CustomerModel> GetAllCustomers(string? MobileNo)
         {
             MobileNo = MobileNo == null ? "" : MobileNo;
             List<CustomerModel> clist = new List<CustomerModel>();
             string qry = @"Select ROW_NUMBER() OVER(ORDER BY tblCustomer.Id desc) as SrNo,tblCustomer.Id,Name,MobileNo,Address
-                                                                            ,TotalAmt,TotalDiscount,PayAmt,RemarkId,
+                                                                            ,TotalQuantity,TotalAmt,TotalDiscount,PayAmt,RemarkId,
                                                                             r.Remark from tblCustomer left join tblRemark r 
 			                                                                on tblCustomer.RemarkId=r.Id where tblCustomer.IsDeleted=0 
 			                                                                and (MobileNo like '%'+@MobileNo+'%' or @MobileNo is null ) 
@@ -45,6 +45,7 @@ namespace DMartMallSoftware.DAL
                     c.Name = dr["Name"].ToString();
                     c.MobileNo = dr["MobileNo"].ToString();
                     c.Address = dr["Address"].ToString();
+                    c.TotalQuantity = Convert.ToInt32(dr["TotalQuantity"]);
                     c.TotalAmt = (float)Convert.ToDouble(dr["TotalAmt"]);
                     c.TotalDiscount = (float)Convert.ToDouble(dr["TotalDiscount"]);
                     c.PayAmt = (float)Convert.ToDouble(dr["PayAmt"]);
@@ -59,7 +60,7 @@ namespace DMartMallSoftware.DAL
         public CustomerModel GetSelectedCustomers(int MobileNo)
         {
             CustomerModel c = new CustomerModel();
-            string qry = @"Select ROW_NUMBER() OVER(ORDER BY Id desc) as SrNo,Id,Name,MobileNo,Address,SubTotal,TotalDiscount,
+            string qry = @"Select ROW_NUMBER() OVER(ORDER BY Id desc) as SrNo,Id,Name,MobileNo,Address,TotalQuantity,SubTotal,TotalDiscount,
                 GrandTotal,Remark from tbl_Customer where IsDeleted=0 and MobileNo=@MobileNo ";
             cmd = new SqlCommand(qry, con);
             cmd.Parameters.AddWithValue("@MobileNo", MobileNo);
@@ -74,6 +75,7 @@ namespace DMartMallSoftware.DAL
                     c.Name = dr["Name"].ToString();
                     c.MobileNo = dr["MobileNo"].ToString();
                     c.Address = dr["Address"].ToString();
+                    c.TotalQuantity = Convert.ToInt32(dr["TotalQuantity"]);
                     c.SubTotal = (float)Convert.ToDouble(dr["SubTotal"]);
                     c.TotalDiscount = (float)Convert.ToDouble(dr["TotalDiscount"]);
                     c.GrandTotal = (float)Convert.ToDouble(dr["GrandTotal"]);
@@ -88,7 +90,7 @@ namespace DMartMallSoftware.DAL
         public CustomerModel GetCustomerById(int Id)
         {
             CustomerModel c = new CustomerModel();
-            string qry = @"Select tblCustomer.Id,Name,MobileNo,Address
+            string qry = @"Select tblCustomer.Id,Name,MobileNo,Address,TotalQuantity
                                                                             ,TotalAmt,TotalDiscount,PayAmt,
                                                                             r.Remark from tblCustomer left join tblRemark r 
 			                                                                on tblCustomer.RemarkId=r.Id where tblCustomer.IsDeleted=0 
@@ -105,6 +107,7 @@ namespace DMartMallSoftware.DAL
                     c.Name = dr["Name"].ToString();
                     c.MobileNo = dr["MobileNo"].ToString();
                     c.Address = dr["Address"].ToString();
+                    c.TotalQuantity = Convert.ToInt32(dr["TotalQuantity"]);
                     c.TotalAmt = (float)Convert.ToDouble(dr["TotalAmt"]);
                     c.TotalDiscount = (float)Convert.ToDouble(dr["TotalDiscount"]);
                     c.PayAmt = (float)Convert.ToDouble(dr["PayAmt"]);
@@ -213,8 +216,8 @@ namespace DMartMallSoftware.DAL
                 }
             }
             con.Close();
-            string qry = @"insert into tblCustomer(Name,MobileNo,Address,TotalAmt,TotalDiscount,PayAmt,RemarkId,CreatedBy,CreatedDate,IsDeleted) 
-                            values(@Name,@MobileNo,@Address,0,0,0,1,@CreatedBy,@CreatedDate,0);";
+            string qry = @"insert into tblCustomer(Name,MobileNo,Address,TotalQuantity,TotalAmt,TotalDiscount,PayAmt,RemarkId,CreatedBy,CreatedDate,IsDeleted) 
+                            values(@Name,@MobileNo,@Address,0,0,0,0,1,@CreatedBy,@CreatedDate,0);";
             cmd = new SqlCommand(qry, con);
             customer.CreatedDate = DateTime.Now;
             cmd.Parameters.AddWithValue("@Name", customer.Name);
@@ -261,7 +264,7 @@ namespace DMartMallSoftware.DAL
             if (dr.HasRows)
             {
                 con.Close();
-                string query1 = @"select TotalAmt,TotalDiscount,PayAmt from tblCustomer where Id=@Id and RemarkId=1 and IsDeleted=0 ";
+                string query1 = @"select TotalAmt,TotalDiscount,PayAmt,TotalQuantity from tblCustomer where Id=@Id and RemarkId=1 and IsDeleted=0 ";
                 cmd = new SqlCommand(query1, con);
                 cmd.Parameters.AddWithValue("@Id", CustId);
                 con.Open();
@@ -274,6 +277,7 @@ namespace DMartMallSoftware.DAL
                         float subtotal = (float)Convert.ToDouble(dr["TotalAmt"]);
                         float grandtotal = (float)Convert.ToDouble(dr["PayAmt"]);
                         float totaldiscount = (float)Convert.ToDouble(dr["TotalDiscount"]);
+                        float totalquantity = Convert.ToInt32(dr["TotalQuantity"]);
                         con.Close();
                         string querys1 = @" select Id,Quantity,Price,Discount,TotalAmt,TotalDiscount,NetAmt from tblcart 
                                                                     where CustId=@CustId and IsDeleted=0 and ProductId=@ProductId and UnitId=@UnitId";
@@ -307,6 +311,7 @@ namespace DMartMallSoftware.DAL
                                 subtotal = subtotal + cart.TotalAmt;
                                 grandtotal = grandtotal + cart.NetAmt;
                                 totaldiscount = totaldiscount + cart.TotalDiscount;
+                                totalquantity = (totalquantity) + cart.Quantity;
                                 cart.NetAmt = (cart.TotalAmt - cart.TotalDiscount) + netAmt;
                                 cart.TotalDiscount = (discount * cart.Quantity) + totalDiscount;
                                 cart.TotalAmt = (price * cart.Quantity) + totalAmt;
@@ -405,7 +410,8 @@ namespace DMartMallSoftware.DAL
 
                             subtotal = subtotal + cart.TotalAmt;
                             grandtotal = grandtotal + cart.NetAmt;
-                            totaldiscount = totaldiscount + cart.TotalDiscount;
+                            totaldiscount = totaldiscount + cart.TotalDiscount; 
+                            totalquantity = totalquantity + cart.Quantity;
                         }
                         ProductModel p = new ProductModel();
                         var countquery = "Select Quantity,UnitId from tblStock where Id=@Id";
@@ -434,11 +440,12 @@ namespace DMartMallSoftware.DAL
                         con.Close();
 
                         var qry2 = @"	update tblCustomer set TotalAmt=@TotalAmt,PayAmt=@PayAmt,
-                                    Totaldiscount=@Totaldiscount where Id=@Id";
+                                    Totaldiscount=@Totaldiscount,TotalQuantity=@TotalQuantity where Id=@Id";
                         cmd = new SqlCommand(qry2, con);
                         cmd.Parameters.AddWithValue("@TotalAmt", subtotal);
                         cmd.Parameters.AddWithValue("@PayAmt", grandtotal);
                         cmd.Parameters.AddWithValue("@Totaldiscount", totaldiscount);
+                        cmd.Parameters.AddWithValue("@TotalQuantity", totalquantity);
                         cmd.Parameters.AddWithValue("@Id", CustId);
                         con.Open();
                         result = cmd.ExecuteNonQuery();
@@ -455,6 +462,7 @@ namespace DMartMallSoftware.DAL
 
         public int EditCartItem(CartModel cart)
         {
+            float totalquantity;
             float subtotal;
             float grandtotal;
             float totaldiscount;
@@ -511,7 +519,7 @@ namespace DMartMallSoftware.DAL
                 }
 
                 con.Close();
-                string query1 = @"select TotalAmt,TotalDiscount,PayAmt from tblCustomer where Id=@Id and RemarkId=1 and IsDeleted=0 ";
+                string query1 = @"select TotalQuantity,TotalAmt,TotalDiscount,PayAmt from tblCustomer where Id=@Id and RemarkId=1 and IsDeleted=0 ";
                 cmd = new SqlCommand(query1, con);
                 cmd.Parameters.AddWithValue("@Id", custid);
                 con.Open();
@@ -521,6 +529,7 @@ namespace DMartMallSoftware.DAL
                 {
                     if (dr.Read())
                     {
+                        totalquantity = Convert.ToInt32(dr["TotalQuantity"]);
                         subtotal = (float)Convert.ToDouble(dr["TotalAmt"]);
                         grandtotal = (float)Convert.ToDouble(dr["PayAmt"]);
                         totaldiscount = (float)Convert.ToDouble(dr["TotalDiscount"]);
@@ -528,6 +537,7 @@ namespace DMartMallSoftware.DAL
                         subtotal = subtotal - totalamt;
                         grandtotal = grandtotal - netamt;
                         totaldiscount = totaldiscount - totaldisc;
+                        totalquantity = totalquantity - qua;
                         quantity = quantity + qua;
                         con.Close();
                         var updatecountquery = "update tblStock set quantity=@quantity where Id=@Id";
@@ -539,11 +549,12 @@ namespace DMartMallSoftware.DAL
                         con.Close();
 
                         var qry2 = @"	update tblCustomer set TotalAmt=@TotalAmt,PayAmt=@PayAmt,
-                                    Totaldiscount=@Totaldiscount where Id=@Id";
+                                    Totaldiscount=@Totaldiscount,TotalQuantity=@TotalQuantity where Id=@Id";
                         cmd = new SqlCommand(qry2, con);
                         cmd.Parameters.AddWithValue("@TotalAmt", subtotal);
                         cmd.Parameters.AddWithValue("@PayAmt", grandtotal);
                         cmd.Parameters.AddWithValue("@Totaldiscount", totaldiscount);
+                        cmd.Parameters.AddWithValue("@TotalQuantity", totalquantity);
                         cmd.Parameters.AddWithValue("@Id", custid);
                         con.Open();
                         result = cmd.ExecuteNonQuery();
@@ -706,6 +717,36 @@ namespace DMartMallSoftware.DAL
             }
             con.Close();
             return unit;
+        }*/
+
+        public List<CustomerModelV1> GetAllCustomers(string? MobileNo)
+        {
+            MobileNo = MobileNo == null ? "" : MobileNo;
+            List<CustomerModelV1> clist = new List<CustomerModelV1>();
+            string qry = @"Select ROW_NUMBER() OVER(ORDER BY Id desc) as SrNo,Id,Name,MobileNo,Address
+                                                                            from tblCustomerV1  where IsDeleted=0 
+			                                                                and (MobileNo like '%'+@MobileNo+'%' or @MobileNo is null ) 
+                                                                            and CreatedBy =@CreatedBy";
+            cmd = new SqlCommand(qry, con);
+            cmd.Parameters.AddWithValue("@MobileNo", MobileNo);
+            cmd.Parameters.AddWithValue("@CreatedBy", HttpContext.Session.GetString("Id"));
+            con.Open();
+            dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    CustomerModelV1 c = new CustomerModelV1();
+                    c.SrNo = Convert.ToInt32(dr["SrNo"]);
+                    c.Id = Convert.ToInt32(dr["Id"]);
+                    c.Name = dr["Name"].ToString();
+                    c.MobileNo = dr["MobileNo"].ToString();
+                    c.Address = dr["Address"].ToString();
+                    clist.Add(c);
+                }
+            }
+            con.Close();
+            return clist;
         }
 
     }
