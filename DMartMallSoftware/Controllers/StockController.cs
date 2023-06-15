@@ -38,10 +38,14 @@ namespace DMartMallSoftware.Controllers
                 int result = ps.UpdateStock(stock);
                 if (result == 1)
                 {
+                    TempData["EditStock"] = "Stock Item Updated Successfully.";
                     return RedirectToAction(nameof(ShowAllStock));
                 }
                 else
-                    return View();
+                {
+                    TempData["EditStockFail"] = "Error When Update Stock Item!";
+                    return RedirectToAction(nameof(ShowAllStock));
+                }
             }
             catch
             {
@@ -49,15 +53,15 @@ namespace DMartMallSoftware.Controllers
             }
         }
 
-        public ActionResult DeleteStock(int Id)
-        {
-            var model = ps.GetStockById(Id);
-            return View(model);
-        }
+        /*  public ActionResult DeleteStock(int Id)
+          {
+              var model = ps.GetStockById(Id);
+              return View(model);
+          }
 
-        // POST: StockController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+          // POST: StockController/Delete/5
+          [HttpPost]
+          [ValidateAntiForgeryToken]*/
         [ActionName("DeleteStock")]
         public ActionResult DeleteConfirm(int Id)
         {
@@ -66,10 +70,14 @@ namespace DMartMallSoftware.Controllers
                 int result = ps.DeleteStock(Id);
                 if (result == 1)
                 {
+                    TempData["DeleteStock"] = "Stock Item Deleted Successfully.";
                     return RedirectToAction(nameof(ShowAllStock));
                 }
                 else
-                    return View();
+                {
+                    TempData["DeleteStockFail"] = "Error When Delete Stock Item!";
+                    return RedirectToAction(nameof(ShowAllStock));
+                }
             }
             catch
             {

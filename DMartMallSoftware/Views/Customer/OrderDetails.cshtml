@@ -1,0 +1,172 @@
+﻿@model DMartMallSoftware.Models.OrderModel
+
+@{
+    ViewData["Title"] = "OrderDetails";
+}
+
+<h1>Order Details</h1>
+<div>
+
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+        <dt class="col-sm-12">
+            Ordered Items:
+        </dt>
+
+        <dd class="col-sm-12">
+            @{
+                var ctm = Model.OrderItem;
+
+
+                <div class="mt-3">
+                    @if (Model.RemarkId == 1)
+                    {
+
+                        <p>
+                            @Html.ActionLink("Add New", "AddItem","Customer", new { Id =  Model.Id }, new { @class = "btn btn-primary float-end mb-4" })
+
+                        </p>
+                    }
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>SrNo</th>
+                                <th>Name</th>
+                                <th>Unit</th>
+                                <th>Price </th>
+                                <th>Discount</th>
+                                <th>Quantity</th>
+                                <th>Total Amount</th>
+                                <th>Total Discount</th>
+                                <th>Net Amount</th>
+                                @if (Model.RemarkId == 1)
+                                {
+                                    <th>Actions</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ctm)
+                            {
+                                <tr>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => item.SrNo)
+                                    </th>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Unit)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Price)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Discount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Quantity)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TotalAmt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TotalDiscount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NetAmt)
+                                    </td>
+                                    @if (Model.RemarkId == 1)
+                                    {
+                                        <td>
+                                            @Html.ActionLink("Edit", "EditOrderItem", new { Id=item.Id,CId=Model.Id }, new{ @class="btn btn-primary"})
+
+                                            @Html.ActionLink("Remove", "RemoveCartItem", new { Id=item.Id,CId=Model.Id }, new{ @class="btn btn-danger"})
+
+                                        </td>
+                                    }
+
+                                </tr>
+                            }
+                            <tr>
+                                <th colspan="5">
+                                    Total:
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(model => model.TotalQuantity)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(model => model.TotalAmt)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(model => model.TotalDiscount)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(model => model.PayAmt)
+                                </th>
+                                @if (Model.RemarkId == 1)
+                                {
+                                    <td>
+                        <dt>
+                                            @Html.DisplayNameFor(model => model.Remark):
+                                            @Html.DisplayFor(model => model.Remark)
+                                            @if (Model.PayAmt >= 1)
+                                            {
+                                <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#abcd">Pay</button>
+                                            }
+
+                            <div class="modal" id="abcd">
+                                <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            Payment Confirmation
+                                            <button class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h4 class="text-success ">Is Rs. @Html.DisplayFor(model => model.PayAmt) Received Successfully?</h4>
+                                        </div>
+                                        <div class="modal-footer">
+                                                            @Html.ActionLink("Confirm", "PayAmt", new { Id=Model.Id }, new{ @class="btn btn-primary float-end" })
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </dt>
+                        </td>
+                                }
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+            }
+        </dd>
+
+
+
+
+
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Back to Order List", "CustomerDetails", new { CustId = Model.CustId  })
+
+</div>

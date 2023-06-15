@@ -6,6 +6,44 @@
 
 <h1>Show All Demand</h1>
 <hr />
+<p>
+    <a class="btn btn-primary" asp-controller="Demand" asp-action="AddDemand">Add New Request</a>
+</p>
+
+<hr />
+
+@if (TempData["UpdateDemand"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["UpdateDemand"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["AddDemand"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["AddDemand"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["DeleteDemand"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["DeleteDemand"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["DeleteDemandError"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Unsuccess !</strong> @TempData["DeleteDemandError"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
 <div class="row">
     <div class="col-md-12">
         <form method="get" action="ShowAllDemandsForStaff">
@@ -72,44 +110,61 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SrNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Unit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Total)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dealer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PayStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedDate)
-            </td>
-            <td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SrNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Unit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dealer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PayStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModifiedDate)
+                </td>
+                <td>
                     @if (item.StatusId == 1 || item.StatusId == 3 || item.StatusId == 9 || item.StatusId == 12)
                     {
-                        @Html.ActionLink("Delete", "DeleteDemand", new { Id = item.Id }, new { @class = "btn btn-danger" })
+                        var x = ("ab" + item.Id).ToString();
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
+                        <div class="modal" id="@x">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        Delete Demand?
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-warning ">Are You Sure To Delete Demand @Html.DisplayFor(modelItem => item.Name) ?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Delete", "DeleteDemand", new { Id=item.Id }, new{ @class="btn btn-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                     else if (item.StatusId == 2 || item.StatusId == 10)
                     {
@@ -117,22 +172,22 @@
                         <span>&nbsp;</span>
                         @Html.ActionLink("Pay", "ConfirmByAdmin", new { Id = item.Id }, new { @class = "btn btn-primary" })
                     }
-                    else if (item.StatusId == 4 || item.StatusId == 5 || item.StatusId == 6 )
+                    else if (item.StatusId == 4 || item.StatusId == 5 || item.StatusId == 6)
                     {
                     }
-                    else if (item.StatusId == 7 )
+                    else if (item.StatusId == 7)
                     {
                         @Html.ActionLink("Delivered", "DeliveredByAdmin", new { Id = item.Id }, new { @class = "btn btn-success" })
-                            <span>&nbsp;</span>
+                        <span>&nbsp;</span>
                         @Html.ActionLink("Not Delivered", "NotDelinered",new { Id = item.Id }, new { @class = "btn btn-danger" })
                     }
                     else if (item.StatusId == 8)
                     {
                         @Html.ActionLink("Add To Stock", "AddToStock", new { Id = item.Id }, new { @class = "btn btn-primary" })
                     }
-                    
-            </td>
-        </tr>
+
+                </td>
+            </tr>
         }
     </tbody>
 </table>

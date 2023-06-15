@@ -2,12 +2,30 @@
 
 @{
     ViewData["Title"] = "ShowAllStaff";
-    
+
 
 }
 
+@if (TempData["Memberupdate"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["Memberupdate"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+
+@if (TempData["DeleteMember"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["DeleteMember"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+
 <h1>All Staff Members</h1>
-<hr/>
+<hr />
 <div class="row">
     <div class="col-md-12">
         <form method="get" action="ShowAllStaff">
@@ -20,7 +38,7 @@
                         </select>
                     </td>
                     <td class="">
-                        <select name="IsConfirmed" id="IsConfirmed" class="form-control" >
+                        <select name="IsConfirmed" id="IsConfirmed" class="form-control">
                             <option value="Select">Is Confirmed</option>
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
@@ -67,56 +85,78 @@
             <th>
                 @Html.DisplayNameFor(model => model.JoinDate)
             </th>
-            
+
             <th>Action</th>
-           
+
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SrNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MobileNo)
-            </td>
-          
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserType)
-            </td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SrNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MobileNo)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserType)
+                </td>
                 <td>
                     @Html.CheckBoxFor(modelItem => item.IsConfirmed, new { Style = "vertical-align:3px" })
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.AprovedBy)
                 </td>
-            <td>
+                <td>
                     @Html.DisplayFor(modelItem => item.JoinDate)
-            </td>
-           
-            <td>
-                    @Html.ActionLink("Edit", "Edit", new { Id = item.Id}, new{ @class="btn btn-primary"})
-                    @Html.ActionLink("Delete", "Delete", new { Id = item.Id }, new{ @class="btn btn-danger"})
-            </td>
-        </tr>
-}
-       
+                </td>
 
-       
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { Id = item.Id}, new{ @class="btn btn-primary"})
+                    @{
+                        var x = ("abc" + item.Id).ToString();
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
+                        <div class="modal" id="@x">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        Delete Staff Member?
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-warning ">Are You Sure To Delete Staff Member @Html.DisplayFor(modelItem => item.Name)?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Delete", "DeleteMember", new { Id=item.Id }, new{ @class="btn btn-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+
+                </td>
+            </tr>
+        }
+
+
+
     </tbody>
 </table>

@@ -10,13 +10,31 @@
 
 
 <hr />
+
+
+@if (TempData["Notsame"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["Notsame"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["Duplicate"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["Duplicate"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
 <div class="row">
     <div class="col-md-10  d-block m-auto">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-             <div class="card shadow">
+            <div class="card shadow">
 
-        <div class="card-body ">
+                <div class="card-body ">
                     <div class="col-md-12 row">
                         <div class="form-group col-md-6 ">
                             <label asp-for="Name" class="control-label"></label>
@@ -65,9 +83,9 @@
                             <input asp-for="Answer" class="form-control" />
                             <span asp-validation-for="Answer" class="text-danger"></span>
                         </div>
-                       
+
                     </div>
-                        <div class="col-md-12 row">
+                    <div class="col-md-12 row">
                         <div class="form-group col-md-6 ">
                             <label asp-for="Password" class="control-label"></label>
                             <input asp-for="Password" class="form-control " />
@@ -77,18 +95,18 @@
                             <label asp-for="ConfirmPassword" class="control-label"></label>
                             <input asp-for="ConfirmPassword" class="form-control " />
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                            </div>
                         </div>
+                    </div>
 
 
-            </div>
+                </div>
                 <div class="card-footer col-md-12 row d-block m-auto">
                     <input type="submit" value="Register" class="btn btn-primary  col-md-5" />
                     <a asp-controller="Register" asp-action="SignIn"><p class=" float-end">Go For SignIn</p></a>
                 </div>
-            
-               
-          
+
+
+
         </form>
     </div>
 </div>
@@ -101,5 +119,7 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

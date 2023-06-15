@@ -14,7 +14,7 @@ namespace DMartMallSoftware.Controllers
             this.configuration = configuration;
             dd = new DemandDAL(configuration);
         }
-      
+
         public ActionResult AddDemand()
         {
             LoadUDl();
@@ -23,30 +23,35 @@ namespace DMartMallSoftware.Controllers
         }
 
         [HttpPost]
-         public ActionResult AddDemand(DemandModel demand)
-         {
+        public ActionResult AddDemand(DemandModel demand)
+        {
 
-             try
-             {
-                 int result = dd.AddDemand(demand);
-                 if (result == 1)
-                 {
-                     return RedirectToAction("ShowAllStock", "Stock");
-                 }
-                 else
-                     return View();
-             }
-             catch
-             {
-                 return View();
-             }
-         }
+            try
+            {
+                int result = dd.AddDemand(demand);
+                if (result == 1)
+                {
+                    TempData["UpdateDemand"] = "Demand Updated Successfully.";
+                    return RedirectToAction("ShowAllDemandsForStaff", "Demand");
+                }
+                else
+                {
+                    TempData["AddDemand"] = "Demand Added Successfully.";
+                    return RedirectToAction("ShowAllDemandsForStaff", "Demand");
+                }
 
-        public ActionResult ShowAllDemandsForStaff(string Name,int dealer,int status)
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult ShowAllDemandsForStaff(string Name, int dealer, int status)
         {
             LoadDlDl();
             Loadst();
-            var model = dd.ShowAllDemandsForStaff(Name,dealer,status);
+            var model = dd.ShowAllDemandsForStaff(Name, dealer, status);
             return View(model);
         }
 
@@ -73,17 +78,17 @@ namespace DMartMallSoftware.Controllers
         }
         public ActionResult AddToStock(int Id)
         {
-           
+
             LoadDISC();
             var model = dd.GetDemandById(Id);
-            StockModel stock= new StockModel();
-            stock.Name=model.Name;
-            stock.Quantity=model.Quantity;
-            stock.UnitId=model.UnitId;
-            stock.Unit=model.Unit;
-            stock.Price=model.Price;
-            stock.Id=model.Id;
-            LoadUDll(stock.UnitId,stock.Unit);
+            StockModel stock = new StockModel();
+            stock.Name = model.Name;
+            stock.Quantity = model.Quantity;
+            stock.UnitId = model.UnitId;
+            stock.Unit = model.Unit;
+            stock.Price = model.Price;
+            stock.Id = model.Id;
+            LoadUDll(stock.UnitId, stock.Unit);
             return View(stock);
         }
 
@@ -107,16 +112,16 @@ namespace DMartMallSoftware.Controllers
             }
         }
 
-        public ActionResult DeleteDemand(int Id)
+        /*public ActionResult DeleteDemand(int Id)
         {
-           
+
             var model = dd.GetDemandById(Id);
             return View(model);
         }
 
         // POST: StockController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]*/
         [ActionName("DeleteDemand")]
         public ActionResult DeleteConfirm(int Id)
         {
@@ -125,10 +130,14 @@ namespace DMartMallSoftware.Controllers
                 int result = dd.DeleteDemand(Id);
                 if (result == 1)
                 {
+                    TempData["DeleteDemand"] = "Demand Deleted Successfully.";
                     return RedirectToAction(nameof(ShowAllDemandsForStaff));
                 }
                 else
-                    return View();
+                {
+                    TempData["DeleteDemandError"] = "Errror Occured When Delete Demand!";
+                    return RedirectToAction(nameof(ShowAllDemandsForStaff));
+                }
             }
             catch
             {

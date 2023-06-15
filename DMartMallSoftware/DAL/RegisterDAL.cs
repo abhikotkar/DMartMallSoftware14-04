@@ -9,13 +9,13 @@ using System.Runtime.Intrinsics.Arm;
 
 namespace DMartMallSoftware.DAL
 {
-    public class RegisterDAL:HttpContextAccessor
+    public class RegisterDAL : HttpContextAccessor
     {
         SqlConnection con;
         SqlCommand cmd;
         SqlDataReader dr;
 
-       
+
 
 
         public RegisterDAL(IConfiguration configuration)
@@ -23,7 +23,7 @@ namespace DMartMallSoftware.DAL
             con = new SqlConnection(configuration.GetValue<string>("ConnectionStrings:SqlConnection"));
             //httpContext= httpContextAccessor;
         }
-       
+
         //Login Staff
         public StaffModel UserLogin(StaffModel staff)
         {
@@ -49,10 +49,10 @@ namespace DMartMallSoftware.DAL
             return s;
         }
         //Add staff members
-        public  int AddStaff(StaffModel staff)
+        public int AddStaff(StaffModel staff)
         {
             var result = 0;
-            var id = 0 ;
+            var id = 0;
             string qry1 = "select Id from tblStaff where (Email=@Email or MobileNo=@MobileNo) and IsDeleted=0";
             cmd = new SqlCommand(qry1, con);
             cmd.Parameters.AddWithValue("@Email", staff.Email);
@@ -63,39 +63,43 @@ namespace DMartMallSoftware.DAL
             {
                 while (dr.Read())
                 {
-                    id =  Convert.ToInt32(dr["Id"]);
+                    id = Convert.ToInt32(dr["Id"]);
                     break;
                 }
             }
             con.Close();
-            if (id==0 && staff.Password == staff.ConfirmPassword)
+            if (id == 0)
             {
-                string qry = @"insert into tblStaff(Name,Email,GenderId,MobileNo,Address,UserTypeId,QuetionId,Answer,Password,Salary,IsConfirmed,CreatedDate,IsDeleted) 
+                result = 2;
+                if (staff.Password == staff.ConfirmPassword)
+                {
+                    string qry = @"insert into tblStaff(Name,Email,GenderId,MobileNo,Address,UserTypeId,QuetionId,Answer,Password,Salary,IsConfirmed,CreatedDate,IsDeleted) 
                             values(@Name,@Email,@GenderId,@MobileNo,@Address,@UserTypeId,@QuetionId,@Answer,@Password,0,0,@CreatedDate,0);
                             SELECT CAST(SCOPE_IDENTITY() as int)";
-                cmd = new SqlCommand(qry, con);
-                staff.CreatedDate = DateTime.Now;
-                cmd.Parameters.AddWithValue("@Name", staff.Name);
-                cmd.Parameters.AddWithValue("@Email", staff.Email);
-                cmd.Parameters.AddWithValue("@GenderId", staff.GenderId);
-                cmd.Parameters.AddWithValue("@MobileNo", staff.MobileNo);
-                cmd.Parameters.AddWithValue("@Address", staff.Address);
-                cmd.Parameters.AddWithValue("@UserTypeId", staff.UserTypeId);
-                cmd.Parameters.AddWithValue("@QuetionId", staff.QuetionId);
-                cmd.Parameters.AddWithValue("@Answer", staff.Answer);
-                cmd.Parameters.AddWithValue("@Password", staff.Password);
-                cmd.Parameters.AddWithValue("@CreatedDate", staff.CreatedDate);
-                //new SqlCommand("select Id from tbl_UserType where UserType=@UserType", con).Parameters.AddWithValue("@UserType", staff.UserType));
-                con.Open();
-                result = (int)cmd.ExecuteScalar();
-                con.Close();
-                string qry2 = @"update tblStaff set CreatedBy=@Id,ModifiedBy=@Id where Id=@Id";
-                cmd = new SqlCommand(qry2, con);
-                cmd.Parameters.AddWithValue("@Id", result);
-                con.Open();
-                result = cmd.ExecuteNonQuery();
-                con.Close();
-                return result;
+                    cmd = new SqlCommand(qry, con);
+                    staff.CreatedDate = DateTime.Now;
+                    cmd.Parameters.AddWithValue("@Name", staff.Name);
+                    cmd.Parameters.AddWithValue("@Email", staff.Email);
+                    cmd.Parameters.AddWithValue("@GenderId", staff.GenderId);
+                    cmd.Parameters.AddWithValue("@MobileNo", staff.MobileNo);
+                    cmd.Parameters.AddWithValue("@Address", staff.Address);
+                    cmd.Parameters.AddWithValue("@UserTypeId", staff.UserTypeId);
+                    cmd.Parameters.AddWithValue("@QuetionId", staff.QuetionId);
+                    cmd.Parameters.AddWithValue("@Answer", staff.Answer);
+                    cmd.Parameters.AddWithValue("@Password", staff.Password);
+                    cmd.Parameters.AddWithValue("@CreatedDate", staff.CreatedDate);
+                    //new SqlCommand("select Id from tbl_UserType where UserType=@UserType", con).Parameters.AddWithValue("@UserType", staff.UserType));
+                    con.Open();
+                    result = (int)cmd.ExecuteScalar();
+                    con.Close();
+                    string qry2 = @"update tblStaff set CreatedBy=@Id,ModifiedBy=@Id where Id=@Id";
+                    cmd = new SqlCommand(qry2, con);
+                    cmd.Parameters.AddWithValue("@Id", result);
+                    con.Open();
+                    result = cmd.ExecuteNonQuery();
+                    con.Close();
+                    return result;
+                }
             }
             return result;
         }
@@ -103,7 +107,7 @@ namespace DMartMallSoftware.DAL
 
 
         //Show all Staff members
-        public List<StaffModel> GetStaff(string Name, int TextId,string IsConfirmed)
+        public List<StaffModel> GetStaff(string Name, int TextId, string IsConfirmed)
         {
             Name = Name == null ? "" : Name;
             TextId = TextId == null ? 0 : TextId;
@@ -208,28 +212,50 @@ namespace DMartMallSoftware.DAL
 
         public int UpdateMyProfile(StaffModel staff)
         {
-            string qry = @"update tblStaff set Name=@Name,Email=@Email,MobileNo=@MobileNo,Address=@Address,QuetionId=@QuetionId,Answer=@Answer
-                             where Id=@Id and IsDeleted=0";
-            cmd = new SqlCommand(qry, con);
-            staff.ModifiedDate = DateTime.Now;
-            cmd.Parameters.AddWithValue("@Id", staff.Id);
-            cmd.Parameters.AddWithValue("@Name", staff.Name);
+            int result = 0;
+            var id = 0;
+            string qry1 = "select 1 from tblStaff where (Email=@Email or MobileNo=@MobileNo) and IsDeleted=0 and Id!=Id";
+            cmd = new SqlCommand(qry1, con);
             cmd.Parameters.AddWithValue("@Email", staff.Email);
             cmd.Parameters.AddWithValue("@MobileNo", staff.MobileNo);
-            cmd.Parameters.AddWithValue("@Address", staff.Address);
-            cmd.Parameters.AddWithValue("@QuetionId", staff.QuetionId);
-            cmd.Parameters.AddWithValue("@Answer", staff.Answer);
+            cmd.Parameters.AddWithValue("@Id", staff.Id);
             con.Open();
-            int result = cmd.ExecuteNonQuery();
+            dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    id = Convert.ToInt32(dr["Id"]);
+                    break;
+                }
+            }
             con.Close();
+            if (id == 0)
+            {
+                string qry = @"update tblStaff set Name=@Name,Email=@Email,MobileNo=@MobileNo,Address=@Address,QuetionId=@QuetionId,Answer=@Answer
+                             where Id=@Id and IsDeleted=0";
+                cmd = new SqlCommand(qry, con);
+                staff.ModifiedDate = DateTime.Now;
+                cmd.Parameters.AddWithValue("@Id", staff.Id);
+                cmd.Parameters.AddWithValue("@Name", staff.Name);
+                cmd.Parameters.AddWithValue("@Email", staff.Email);
+                cmd.Parameters.AddWithValue("@MobileNo", staff.MobileNo);
+                cmd.Parameters.AddWithValue("@Address", staff.Address);
+                cmd.Parameters.AddWithValue("@QuetionId", staff.QuetionId);
+                cmd.Parameters.AddWithValue("@Answer", staff.Answer);
+                con.Open();
+                result = cmd.ExecuteNonQuery();
+                con.Close();
+            }
             return result;
+
         }
 
         public int DeleteMember(int Id)
         {
             string qry = "update tblStaff set IsDeleted=1,ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate where Id=@Id";
             cmd = new SqlCommand(qry, con);
-           
+
             cmd.Parameters.AddWithValue("@Id", Id);
             cmd.Parameters.AddWithValue("@ModifiedBy", HttpContext.Session.GetString("Id"));
             cmd.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
@@ -272,7 +298,7 @@ namespace DMartMallSoftware.DAL
             int result = 0;
             if (staff.Password == staff.ConfirmPassword)
             {
-                
+
                 string qry = @"update tblStaff set Password=@Password where Id=@Id and IsDeleted=0";
                 cmd = new SqlCommand(qry, con);
                 cmd.Parameters.AddWithValue("@Password", staff.Password);
@@ -281,7 +307,7 @@ namespace DMartMallSoftware.DAL
                 result = cmd.ExecuteNonQuery();
 
                 con.Close();
-               
+
             }
             return result;
         }
@@ -307,6 +333,7 @@ namespace DMartMallSoftware.DAL
             int result = 0;
             if (id == staff.Id)
             {
+                result = 2;
                 if (staff.Password == staff.ConfirmPassword)
                 {
 

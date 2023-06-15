@@ -1,0 +1,154 @@
+﻿@model DMartMallSoftware.Models.CustomerModelV1
+
+@{
+    ViewData["Title"] = "CustomerDetails";
+}
+
+<h1>Customer Details</h1>
+<div>
+
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MobileNo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MobileNo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class="col-sm-12">
+            Orders:
+        </dt>
+
+        <dd class="col-sm-12">
+            @{
+                var ctm = Model.OrderDetails;
+
+
+                <div class="mt-3">
+                    <p>
+                        @Html.ActionLink("Create New Order", "AddOrder","Customer", new { CustId =  Model.Id }, new { @class = "btn btn-primary float-end mb-4" })
+
+                    </p><br /><br />
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form method="get" action="CustomerDetails">
+                                <table class="table text-center">
+                                    <tr>
+                                        <td class=""><input type="text" id="searchText" name="searchText" class="form-control" placeholder="Enter Order No..." /></td>
+                                        <td class="visually-hidden"><input type="text" id="CustId" name="CustId" class="form-control" value="@Model.Id" /></td>
+                                        <td class=""><input type="submit" class="btn btn-primary ms-5" name="Search" value="Search" /></td>
+
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                    <br />
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>SrNo</th>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>TotalQuantity</th>
+                                <th>TotalAmt </th>
+                                <th>TotalDiscount</th>
+                                <th>PayAmt</th>
+                                <th>Remark</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ctm)
+                            {
+                                <tr>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => item.SrNo)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => item.Id)
+                                    </th>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TotalQuantity)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TotalAmt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TotalDiscount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PayAmt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Remark)
+                                    </td>
+                                    <td>
+                                       @Html.ActionLink("Details", "OrderDetails", new { Id=item.Id}, new{ @class="btn btn-success"})
+                                        @if (item.RemarkId == 1)
+                                        {
+                                            @Html.ActionLink("Cancel Order", "CancelOrder", new { Id=item.Id,CId=Model.Id }, new{ @class="btn btn-danger"})
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            @*<tr>
+                        <th colspan="5">
+                        Total:
+                        </th>
+                        <th>
+                        @Html.DisplayFor(model => model.TotalQuantity)
+                        </th>
+                        <th>
+                        @Html.DisplayFor(model => model.TotalAmt)
+                        </th>
+                        <th>
+                        @Html.DisplayFor(model => model.TotalDiscount)
+                        </th>
+                        <th>
+                        @Html.DisplayFor(model => model.PayAmt)
+                        </th>
+                        <td>
+                        <dt>
+                        @Html.DisplayNameFor(model => model.Remark):
+                        @Html.DisplayFor(model => model.Remark)
+                        </dt>
+                        </td>
+                        </tr>*@
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </dd>
+
+
+
+
+
+    </dl>
+</div>
+<div>
+    <a asp-action="AllCustomers">Back to Customer List</a>
+</div>

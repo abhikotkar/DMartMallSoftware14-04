@@ -11,8 +11,8 @@ namespace DMartMallSoftware.Controllers
 
         public RegisterController(IConfiguration configuration)
         {
-           this.configuration  = configuration;
-           rd = new RegisterDAL(configuration);
+            this.configuration = configuration;
+            rd = new RegisterDAL(configuration);
         }
 
 
@@ -28,8 +28,9 @@ namespace DMartMallSoftware.Controllers
 
             StaffModel user = rd.UserLogin(staff);
 
-            if (user.Password == staff.Password && user.IsConfirmed==true)
+            if (user.Password == staff.Password && user.IsConfirmed == true)
             {
+                TempData["Valid"] = "Login Successfully";
                 HttpContext.Session.SetString("Name", user.Name.ToString());
                 HttpContext.Session.SetString("UserTypeId", user.UserTypeId.ToString());
                 HttpContext.Session.SetString("Email", user.Email.ToString());
@@ -47,7 +48,11 @@ namespace DMartMallSoftware.Controllers
 
             }
             else
+            {
+                TempData["Invalid"] = "Invalid Username Or Password!";
                 return View();
+            }
+
 
 
 
@@ -58,12 +63,13 @@ namespace DMartMallSoftware.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
+            TempData["LogOut"] = "LogOut Successfully.";
             return RedirectToAction("SignIn");
         }
 
         // POST: RegisterController/Create/(Add Staff)
         public ActionResult Create()
-         {
+        {
             LoadDDl();
             LoadGDl();
             LoadQDl();
@@ -79,10 +85,19 @@ namespace DMartMallSoftware.Controllers
                 int result = rd.AddStaff(staff);
                 if (result == 1)
                 {
+                    TempData["Register"] = "Register Successfully.";
                     return RedirectToAction("SignIn", "Register");
                 }
-                else
+                else if (result == 2)
+                {
+                    TempData["Notsame"] = "Password And Confirm Password Was Not Match!";
                     return RedirectToAction("Create", "Register");
+                }
+                else
+                {
+                    TempData["Duplicate"] = "Mobile No. or Email Already Exist!";
+                    return RedirectToAction("Create", "Register");
+                }
             }
             catch
             {
@@ -91,13 +106,13 @@ namespace DMartMallSoftware.Controllers
         }
 
         // POST: RegisterController/SignIn/(For login Authentications)
-       
+
         //GET: RegisterController/SignIn/(For Logout session)
 
-       
+
 
         //Show all Staff Details
-        public ActionResult ShowAllStaff(string Name, int TextId,string IsConfirmed)
+        public ActionResult ShowAllStaff(string Name, int TextId, string IsConfirmed)
         {
             LoadDDl();
             var model = rd.GetStaff(Name, TextId, IsConfirmed);
@@ -115,7 +130,7 @@ namespace DMartMallSoftware.Controllers
         public ActionResult Edit(int Id)
         {
             LoadDDl1();
-            var model = rd.GetStaffById(Id);            
+            var model = rd.GetStaffById(Id);
             return View(model);
         }
 
@@ -129,6 +144,7 @@ namespace DMartMallSoftware.Controllers
                 int result = rd.UpdateStaff(staff);
                 if (result == 1)
                 {
+                    TempData["Memberupdate"] = "Staff Member Updated Successfully";
                     return RedirectToAction(nameof(ShowAllStaff));
                 }
                 else
@@ -158,10 +174,14 @@ namespace DMartMallSoftware.Controllers
                 int result = rd.UpdateMyProfile(staff);
                 if (result == 1)
                 {
+                    TempData["EditMyProfile"] = "Your Profile Update Successfully.";
                     return RedirectToAction("Index", "Home");
                 }
                 else
-                    return View();
+                {
+                    TempData["EditMyProfileFail"] = "Mobile No. Or Email Already Exists!";
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch
             {
@@ -169,16 +189,8 @@ namespace DMartMallSoftware.Controllers
             }
         }
 
-        public ActionResult Delete(int Id)
-        {
-            var model = rd.GetStaffById(Id);
-            return View(model);
-        }
 
-        // POST: ProductController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ActionName("Delete")]
+        [ActionName("DeleteMember")]
         public ActionResult DeleteConfirm(int Id)
         {
             try
@@ -186,17 +198,17 @@ namespace DMartMallSoftware.Controllers
                 int result = rd.DeleteMember(Id);
                 if (result == 1)
                 {
+                    TempData["DeleteMember"] = "Staff Member Deleted Successfully.";
                     return RedirectToAction(nameof(ShowAllStaff));
                 }
                 else
-                    return View();
+                    return RedirectToAction(nameof(ShowAllStaff));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(ShowAllStaff));
             }
         }
-
         //forgot password
 
         public ActionResult ForgotPassword()
@@ -215,10 +227,14 @@ namespace DMartMallSoftware.Controllers
                 int result = rd.CheckAns(staff);
                 if (result != 0)
                 {
-                    return RedirectToAction("ForgotPasswordNew", "Register", new {Id=result});
+                    TempData["ValidCredentials"] = "Enter New Password.";
+                    return RedirectToAction("ForgotPasswordNew", "Register", new { Id = result });
                 }
                 else
+                {
+                    TempData["InvalidCredentials"] = "Invalid Credentials!";
                     return RedirectToAction("ForgotPassword", "Register");
+                }
             }
             catch
             {
@@ -239,12 +255,23 @@ namespace DMartMallSoftware.Controllers
             try
             {
                 int result = rd.ChangePass(staff);
-                if (result != 0)
+                if (result == 0)
                 {
+                    TempData["ChangePassFail"] = "Old Password Has Wrong!";
+                    return RedirectToAction("ChangePassword", "Register");
+                }
+                else if (result == 2)
+                {
+                    TempData["ChangePassFails"] = "Password And Confirm Password Not Match!";
+                    return RedirectToAction("ChangePassword", "Register");
+                }
+                else if (result == 1)
+                {
+                    TempData["ChangePass"] = "Password Changed Successfully.";
                     return RedirectToAction("Index", "Home");
                 }
                 else
-                    return RedirectToAction("ChangePassword", "Register");
+                    return RedirectToAction("Index", "Home");
             }
             catch
             {
@@ -267,10 +294,14 @@ namespace DMartMallSoftware.Controllers
                 int result = rd.forgate(staff);
                 if (result != 0)
                 {
+                    TempData["ChangeSuccess"] = "Password Forgate Successfully.";
                     return RedirectToAction("SignIn", "Register");
                 }
                 else
+                {
+                    TempData["Notsame"] = "Password And Confirm Password Was Not Match!";
                     return RedirectToAction("ForgotPasswordNew", "Register");
+                }
             }
             catch
             {

@@ -1,7 +1,39 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@if (TempData["Valid"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["Valid"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["EditMyProfile"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["EditMyProfile"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["EditMyProfileFail"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["EditMyProfileFail"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["ChangePass"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["ChangePass"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
 
 <div class="text-center" style="padding-top:200px">
     <h1 class="display-4">Welcome To D-Mart</h1>
-   </div>
+</div>

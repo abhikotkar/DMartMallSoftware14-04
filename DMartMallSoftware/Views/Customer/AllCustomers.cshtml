@@ -7,9 +7,16 @@
 <h1>Show All Customers</h1>
 <hr />
 <p>
-    <a class="btn btn-primary" asp-controller="Customer" asp-action="AddCustomer">Add New Customer</a>
+    <a class="btn btn-primary" asp-controller="Customer" asp-action="AddCustomerDetail">Add New Customer</a>
 </p>
-
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["Alert"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+            </button>
+    </div>
+}
 <hr />
 <div class="row">
     <div class="col-md-12">
@@ -61,12 +68,12 @@
                     @Html.DisplayFor(modelItem => item.Address)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "EditCustomerDetails", new { Id=item.Id }, new{ @class="btn btn-primary"})
+                    @Html.ActionLink("Edit", "EditCustomer", new { Id=item.Id }, new{ @class="btn btn-primary"})
 
-                    @Html.ActionLink("Details", "Details", new { Id=item.Id }, new{ @class="btn btn-success"})
-                   
-                    @Html.ActionLink("Cancel Bill", "CancelCustomerBill", new { Id=item.Id }, new{ @class="btn btn-danger"})
-                    
+                    @Html.ActionLink("Details", "CustomerDetails", new { CustId=item.Id }, new{ @class="btn btn-success"})
+
+                    @Html.ActionLink("Delete", "CancelCustomer", new { Id=item.Id }, new{ @class="btn btn-danger"})
+
                 </td>
             </tr>
         }

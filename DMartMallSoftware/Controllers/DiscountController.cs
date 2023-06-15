@@ -34,10 +34,14 @@ namespace DMartMallSoftware.Controllers
                 int result = dd.AddDiscountType(discount);
                 if (result == 1)
                 {
+                    TempData["AddDiscount"] = "Discount Type Added Successfully.";
                     return RedirectToAction("ShowAllDiscountTypes", "Discount");
                 }
                 else
-                    return View();
+                {
+                    TempData["AddDiscountFail"] = "Discount Type Already Exists!";
+                    return RedirectToAction("ShowAllDiscountTypes", "Discount");
+                }
             }
             catch
             {
@@ -67,10 +71,14 @@ namespace DMartMallSoftware.Controllers
                 int result = dd.UpdateDiscountType(discount);
                 if (result == 1)
                 {
+                    TempData["EditDiscount"] = "Discount Type Edit Successfully.";
                     return RedirectToAction(nameof(ShowAllDiscountTypes));
                 }
                 else
-                    return View();
+                {
+                    TempData["AddDiscountFail"] = "Discount Type Already Exists!";
+                    return RedirectToAction(nameof(ShowAllDiscountTypes));
+                }
             }
             catch
             {
@@ -78,12 +86,13 @@ namespace DMartMallSoftware.Controllers
             }
         }
 
-      
+
 
         public ActionResult DeleteConfirm(int Id)
         {
-                var model = dd.DeleteDiscountType(Id);
-                return RedirectToAction("ShowAllDiscountTypes", "Discount");
+            var model = dd.DeleteDiscountType(Id);
+            TempData["DeleteDiscount"] = "Discount Type Delete Successfully.";
+            return RedirectToAction("ShowAllDiscountTypes", "Discount");
         }
     }
 }

@@ -24,7 +24,7 @@ namespace DMartMallSoftware.DAL
                             from tblStock s left join tblDiscount d on s.DiscountId=d.Id and d.IsDeleted=0
 			                left join tblUnit u on s.UnitId=u.Id and u.IsDeleted=0
 			                 where s.IsDeleted=0 and s.Name like '%'+@Name+'%'";
-            cmd = new SqlCommand(qry, con); 
+            cmd = new SqlCommand(qry, con);
             SqlParameter par = new SqlParameter();
 
             cmd.Parameters.Add(new SqlParameter("@Name", Name));
@@ -78,15 +78,13 @@ namespace DMartMallSoftware.DAL
 
         public int UpdateStock(StockModel stock)
         {
-            string qry = @"update tblStock set Name=@Name,Price=@Price,Quantity=@Quantity,UnitId=@UnitId,DiscountId=@DiscountId,
+            string qry = @"update tblStock set Price=@Price,DiscountId=@DiscountId,
                             ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate where Id=@Id";
             cmd = new SqlCommand(qry, con);
             stock.ModifiedDate = DateTime.Now;
             cmd.Parameters.AddWithValue("@Id", stock.Id);
             cmd.Parameters.AddWithValue("@Name", stock.Name);
             cmd.Parameters.AddWithValue("@Price", stock.Price);
-            cmd.Parameters.AddWithValue("@Quantity", stock.Quantity);
-            cmd.Parameters.AddWithValue("@UnitId", stock.UnitId);
             cmd.Parameters.AddWithValue("@DiscountId", stock.DiscountId);
             cmd.Parameters.AddWithValue("@ModifiedBy", HttpContext.Session.GetString("Id"));
             cmd.Parameters.AddWithValue("@ModifiedDate", stock.ModifiedDate);
@@ -148,7 +146,7 @@ namespace DMartMallSoftware.DAL
                     unit.Add(new UnitModel
                     {
                         Id = dr.GetInt32("Id"),
-                        Unit =dr.GetString("Unit")
+                        Unit = dr.GetString("Unit")
                     });
                 }
 

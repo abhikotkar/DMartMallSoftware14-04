@@ -19,10 +19,10 @@ namespace DMartMallSoftware.DAL
 
         public int AddDemand(DemandModel demand)
         {
-            int result=0;
+            int result = 0;
             DemandModel staff = new DemandModel();
             string qry = "select Id,Quantity from tblDemand where Name=@Name and UnitId=@UnitId and DealerId=@DealerId and StatusId=1 and IsDeleted=0";
-            cmd = new SqlCommand(qry, con); 
+            cmd = new SqlCommand(qry, con);
             cmd.Parameters.AddWithValue("@Name", demand.Name);
             cmd.Parameters.AddWithValue("@UnitId", demand.UnitId);
             cmd.Parameters.AddWithValue("@DealerId", demand.DealerId);
@@ -58,7 +58,7 @@ namespace DMartMallSoftware.DAL
                 con.Close();
             }
             else
-            { 
+            {
                 string qry1 = @"  insert into tblDemand(Name,UnitId,Quantity,Price,Total,DealerId,PayStatusId,StatusId,CreatedBy,CreatedDate,ModifiedDate,IsDeleted) 
                                 values(@Name,@UnitId,@Quantity,0,0,@DealerId,1,1,@CreatedBy,@CreatedDate,@CreatedDate,0)";
                 cmd = new SqlCommand(qry1, con);
@@ -72,6 +72,7 @@ namespace DMartMallSoftware.DAL
                 con.Open();
                 result = cmd.ExecuteNonQuery();
                 con.Close();
+                result = 2;
             }
             return result;
         }
@@ -291,7 +292,7 @@ namespace DMartMallSoftware.DAL
                 result = cmd.ExecuteNonQuery();
                 con.Close();
             }
-            if(result==1)
+            if (result == 1)
             {
                 string qry2 = "update tblDemand set StatusId=12,ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate where Id=@Id";
                 cmd = new SqlCommand(qry2, con);

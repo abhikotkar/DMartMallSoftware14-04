@@ -5,12 +5,40 @@
 }
 
 <h1>Show All Stock</h1>
-<hr/>
-<p>
-    <a class="btn btn-primary" asp-controller="Demand" asp-action="AddDemand">Add New Request</a>
-</p>
-
 <hr />
+
+@if (TempData["EditStock"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["EditStock"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["EditStockFail"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["EditStockFail"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["DeleteStock"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["DeleteStock"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["DeleteStockFail"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["DeleteStockFail"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
 <div class="row">
     <div class="col-md-12">
         <form method="get" action="ShowAllStock">
@@ -40,7 +68,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)
-            </th> 
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Unit)
             </th>
@@ -74,7 +102,27 @@
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "EditStock", new { Id=item.Id  }, new{ @class="btn btn-primary"})
-                    @Html.ActionLink("Delete", "DeleteStock", new { Id=item.Id }, new{ @class="btn btn-danger"})
+                    @{
+                        var x = ("abcde" + item.Id).ToString();
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
+                        <div class="modal" id="@x">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        Delete Stock Item?
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-warning ">Are You Sure To Delete Stock Item @Html.DisplayFor(modelItem => item.Name)?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Delete", "DeleteStock", new { Id=item.Id }, new{ @class="btn btn-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
                 </td>
             </tr>
         }

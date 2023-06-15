@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DMartMallSoftware.Controllers
 {
-  
+
     public class CustomerController : Controller
     {
         int custId;
@@ -214,6 +214,205 @@ namespace DMartMallSoftware.Controllers
 
             var model = cd.GetAllCustomers(searchText);
             return View(model);
+        }
+
+        public ActionResult EditCustomer(int Id)
+        {
+            var model = cd.GetCustomerById(Id, 0);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditCustomer(CustomerModelV1 customer)
+        {
+            try
+            {
+                int result = cd.UpdateCustomerDetails(customer);
+                if (result == 1)
+                {
+                    return RedirectToAction(nameof(AllCustomers));
+                }
+                else
+                    return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult CancelCustomer(int Id)
+        {
+            var model = cd.CancelCustomer(Id);
+            return RedirectToAction("AllCustomers", "Customer");
+        }
+
+        public ActionResult AddCustomerDetail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddCustomerDetail(CustomerModelV1 customer)
+        {
+            try
+            {
+
+                int result = cd.AddCustomer(customer);
+                if (result == 1)
+                {
+                    TempData["Alert"] = "Customer Added";
+                    return RedirectToAction("AllCustomers", "Customer");
+                }
+                else if (result == -1)
+                {
+                    return RedirectToAction("AllCustomers", "Customer");
+                }
+                else
+                    return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult CustomerDetails(int CustId, int searchText)
+        {
+            var model = cd.GetCustomerById(CustId, searchText);
+            if (model.Id == 0)
+            {
+                return RedirectToAction("AllCustomers", "Customer");
+            }
+            return View(model);
+        }
+
+        public ActionResult CancelOrder(int Id, int CId)
+        {
+            var model = cd.CancelOrder(Id);
+            return RedirectToAction("CustomerDetails", "Customer", new { CustId = CId, searchText = 0 });
+        }
+
+        public ActionResult AddOrder(int CustId)
+        {
+            try
+            {
+                int result = cd.AddOrder(CustId);
+                if (result >= 1)
+                {
+                    return RedirectToAction("CustomerDetails", "Customer", new { CustId = CustId });
+                }
+                else if (result == -1)
+                {
+                    return RedirectToAction("ShowAllCustomers", "Customer");
+                }
+                else
+                    return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+        public ActionResult OrderDetails(int Id)
+        {
+            var model = cd.GetOrderById(Id);
+            return View(model);
+        }
+
+        public ActionResult AddItem(int Id)
+        {
+            ViewBag.orderId = Id;
+            LoadUDl();
+            LoadDDl();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddItem(OrderItemModel order, int id)
+        {
+
+            try
+            {
+                int Id = cd.AddProduct(order, id);
+
+                return RedirectToAction("OrderDetails", "Customer", new { Id = id });
+
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+        public ActionResult EditOrderItem(int Id, int CId)
+        {
+            ViewBag.CustIds = CId;
+            LoadUDl();
+            var model = cd.GetOrderItemById(Id);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditOrderItem(OrderItemModel order)
+        {
+            try
+            {
+                int Id = cd.EditOrderItem(order);
+                return RedirectToAction("OrderDetails", "Customer", new { Id = Id });
+
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult RemoveCartItem(OrderItemModel order, int CId)
+        {
+            var model = cd.EditOrderItem(order);
+            return RedirectToAction("OrderDetails", "Customer", new { Id = CId });
+        }
+
+        public ActionResult PayAmt(int Id)
+        {
+            var model = cd.PayAmt(Id);
+            return RedirectToAction("OrderDetails", "Customer", new { Id = Id });
+        }
+
+        private void LoadDDl()
+        {
+            try
+            {
+                List<ProductModel> product = new List<ProductModel>();
+                product = cd.LoadProducts().ToList();
+                product.Insert(0, new ProductModel { Name = "Please Select Product" });
+                ViewBag.DiscountTypes = product;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void LoadUDl()
+        {
+            try
+            {
+                List<UnitModel> unit = new List<UnitModel>();
+                unit = cd.LoadUnit().ToList();
+                unit.Insert(0, new UnitModel { Id = 0, Unit = "Please Select" });
+                ViewBag.UnitTypes1 = unit;
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }

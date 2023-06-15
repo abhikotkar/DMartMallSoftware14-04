@@ -21,6 +21,7 @@ namespace DMartMallSoftware.Models
         public float GrandTotal { get; set; }
         public string? Remark { get; set; }
         public int RemarkId { get; set; }
+
     }
 
     public class CustomerModelV1 : BaseModel
@@ -31,6 +32,24 @@ namespace DMartMallSoftware.Models
         public string? Name { get; set; }
         public string? MobileNo { get; set; }
         public string? Address { get; set; }
+        public List<OrderModel>? OrderDetails { get; set; }
+    }
 
+
+    public class OrderModel : BaseModel
+    {
+        [Key]
+        public int SrNo { get; set; }
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public int CustId { get; set; }
+        public int TotalQuantity { get; set; }
+        public float TotalAmt { get; set; }
+        public float TotalDiscount { get; set; }
+        public float PayAmt { get; set; }
+        public string? Remark { get; set; }
+        public int RemarkId { get; set; }
+        public DateTime OrderDate { get; set; }
+        public List<OrderItemModel>? OrderItem { get; set; }
     }
 }

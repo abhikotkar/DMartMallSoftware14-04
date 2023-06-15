@@ -15,6 +15,7 @@ namespace DMartMallSoftware.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
