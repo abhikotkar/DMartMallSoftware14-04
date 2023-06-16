@@ -8,6 +8,24 @@
 <div>
 
     <hr />
+
+
+    @if (TempData["AddOrder"] != null)
+    {
+        <div class="alert alert-success">
+            <strong>Success !</strong> @TempData["AddOrder"]
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+    @if (TempData["AddOrderFail"] != null)
+    {
+        <div class="alert alert-danger">
+            <strong>Unsuccess !</strong> @TempData["AddOrderFail"]
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
@@ -106,10 +124,29 @@
                                         @Html.DisplayFor(modelItem => item.Remark)
                                     </td>
                                     <td>
-                                       @Html.ActionLink("Details", "OrderDetails", new { Id=item.Id}, new{ @class="btn btn-success"})
+                                        @Html.ActionLink("Details", "OrderDetails", new { Id=item.Id}, new{ @class="btn btn-success"})
                                         @if (item.RemarkId == 1)
                                         {
-                                            @Html.ActionLink("Cancel Order", "CancelOrder", new { Id=item.Id,CId=Model.Id }, new{ @class="btn btn-danger"})
+                                            var x = ("a" + item.Id).ToString();
+                                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Cancel Order</button>
+                                            <div class="modal" id="@x">
+                                                <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header ">
+                                                            Cancel Order?
+                                                            <button class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h4 class="text-danger ">Are You Sure Cancel Order @Html.DisplayFor(modelItem => item.Name)?</h4>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            @Html.ActionLink("Cancel Order", "CancelOrder", new { Id=item.Id,CId=Model.Id }, new{ @class="btn btn-warning" })
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
                                         }
                                     </td>
                                 </tr>

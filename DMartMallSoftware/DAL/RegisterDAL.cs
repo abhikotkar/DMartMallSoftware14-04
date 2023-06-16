@@ -164,7 +164,7 @@ namespace DMartMallSoftware.DAL
         {
             StaffModel s = new StaffModel();
 
-            string qry = @"select s.Id,s.Name,s.Email,s.MobileNo,g.Gender,s.Address,u.UserType,s.Salary,s.IsConfirmed,st.Name as AprovedBy from tblStaff s 
+            string qry = @"select s.Id,s.Name,s.Email,s.MobileNo,g.Gender,s.Address,u.UserType,s.Salary,s.IsConfirmed,s.Answer,st.Name as AprovedBy from tblStaff s 
 							    join tblStaff st on st.Id=s.ModifiedBy and st.IsDeleted=0
                                 left join tblUserType u on s.UserTypeId=u.Id and u.IsDeleted=0
                                 left join tblGender g on s.GenderId=g.Id
@@ -185,6 +185,7 @@ namespace DMartMallSoftware.DAL
                     s.AprovedBy = dr["AprovedBy"].ToString();
                     s.Address = dr["Address"].ToString();
                     s.UserType = dr["UserType"].ToString();
+                    s.Answer = dr["Answer"].ToString();
                     s.Salary = (float)Convert.ToDouble(dr["Salary"]);
                     s.IsConfirmed = (bool)dr["IsConfirmed"];
                 }

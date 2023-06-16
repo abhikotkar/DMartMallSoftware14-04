@@ -1,6 +1,7 @@
 ﻿using DMartMallSoftware.DAL;
 using DMartMallSoftware.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
 
 namespace DMartMallSoftware.Controllers
 {
@@ -231,10 +232,14 @@ namespace DMartMallSoftware.Controllers
                 int result = cd.UpdateCustomerDetails(customer);
                 if (result == 1)
                 {
+                    TempData["EditCustomer"] = "Customer Details Update Successfully.";
                     return RedirectToAction(nameof(AllCustomers));
                 }
                 else
-                    return View();
+                {
+                    TempData["EditCustomerFail"] = "Mobile No. Already Exists!";
+                    return RedirectToAction("EditCustomer", "Customer", new { Id = customer.Id });
+                }
             }
             catch
             {
@@ -245,6 +250,16 @@ namespace DMartMallSoftware.Controllers
         public ActionResult CancelCustomer(int Id)
         {
             var model = cd.CancelCustomer(Id);
+            if (model == 1)
+            {
+                TempData["CancelCust"] = "Customer Deleted Successfully.";
+                return RedirectToAction("AllCustomers", "Customer");
+            }
+            else
+            {
+                TempData["CancelCustFail"] = "Some Order Present Against Customer!";
+                return RedirectToAction("AllCustomers", "Customer");
+            }
             return RedirectToAction("AllCustomers", "Customer");
         }
 
@@ -262,11 +277,12 @@ namespace DMartMallSoftware.Controllers
                 int result = cd.AddCustomer(customer);
                 if (result == 1)
                 {
-                    TempData["Alert"] = "Customer Added";
+                    TempData["AddCust"] = "Customer Added Successfully.";
                     return RedirectToAction("AllCustomers", "Customer");
                 }
                 else if (result == -1)
                 {
+                    TempData["AddCustFail"] = "Mobile No. Already Exists!";
                     return RedirectToAction("AllCustomers", "Customer");
                 }
                 else
@@ -301,14 +317,14 @@ namespace DMartMallSoftware.Controllers
                 int result = cd.AddOrder(CustId);
                 if (result >= 1)
                 {
+                    TempData["AddOrder"] = "Order Added Successfully.";
                     return RedirectToAction("CustomerDetails", "Customer", new { CustId = CustId });
                 }
-                else if (result == -1)
-                {
-                    return RedirectToAction("ShowAllCustomers", "Customer");
-                }
                 else
-                    return View();
+                {
+                    TempData["AddOrderFail"] = "Existing Order Payment Has Pending!";
+                    return RedirectToAction("CustomerDetails", "Customer", new { CustId = CustId });
+                }
             }
             catch
             {

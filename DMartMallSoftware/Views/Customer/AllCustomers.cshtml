@@ -9,12 +9,44 @@
 <p>
     <a class="btn btn-primary" asp-controller="Customer" asp-action="AddCustomerDetail">Add New Customer</a>
 </p>
-@if (TempData["Alert"] != null)
+@if (TempData["AddCust"] != null)
 {
     <div class="alert alert-success">
-        <strong>Success !</strong> @TempData["Alert"]
+        <strong>Success !</strong> @TempData["AddCust"]
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
-            </button>
+        </button>
+    </div>
+}
+@if (TempData["EditCustomer"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["EditCustomer"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["AddCustFail"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["AddCustFail"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["CancelCust"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["CancelCust"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["CancelCustFail"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["CancelCustFail"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
     </div>
 }
 <hr />
@@ -72,7 +104,27 @@
 
                     @Html.ActionLink("Details", "CustomerDetails", new { CustId=item.Id }, new{ @class="btn btn-success"})
 
-                    @Html.ActionLink("Delete", "CancelCustomer", new { Id=item.Id }, new{ @class="btn btn-danger"})
+                    @{
+                        var x = ("abcde" + item.Id).ToString();
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
+                        <div class="modal" id="@x">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        Delete Customer?
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-warning ">Are You Sure To Delete Customer @Html.DisplayFor(modelItem => item.Name)?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Delete", "CancelCustomer", new { Id=item.Id }, new{ @class="btn btn-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
 
                 </td>
             </tr>

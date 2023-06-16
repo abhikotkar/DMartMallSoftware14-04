@@ -872,6 +872,7 @@ namespace DMartMallSoftware.DAL
 
         public int CancelCustomer(int Id)
         {
+            int result = 0;
             int id = 0;
             string qry1 = @"Select top 1 Id from tblOrder where CustId=@Id  and IsDeleted=0 ";
             cmd = new SqlCommand(qry1, con);
@@ -895,7 +896,7 @@ namespace DMartMallSoftware.DAL
                 cmd.Parameters.AddWithValue("@ModifiedBy", HttpContext.Session.GetString("Id"));
                 cmd.Parameters.AddWithValue("@ModifiedDate", ModifiedDate);
                 con.Open();
-                int result = cmd.ExecuteNonQuery();
+                result = cmd.ExecuteNonQuery();
                 con.Close();/*
             if (result >= 1)
             {
@@ -910,7 +911,7 @@ namespace DMartMallSoftware.DAL
                 con.Close();
             }*/
             }
-            return id;
+            return result;
         }
         public int CancelOrder(int Id)
         {
@@ -974,6 +975,7 @@ namespace DMartMallSoftware.DAL
         public int AddOrder(int CustId)
         {
             int result = 0;
+            int id = 0;
             string qry1 = @"select Id from tblOrder Where CustId=@CustId and RemarkId=1 and IsDeleted=0;";
 
             cmd = new SqlCommand(qry1, con);
@@ -984,7 +986,7 @@ namespace DMartMallSoftware.DAL
             {
                 if (dr.Read())
                 {
-                    result = Convert.ToInt32(dr["Id"]);
+                    id = Convert.ToInt32(dr["Id"]);
                 }
                 /*if (customer.Id != 0)
                 {
@@ -992,7 +994,7 @@ namespace DMartMallSoftware.DAL
                 }*/
             }
             con.Close();
-            if (result == 0)
+            if (id == 0)
             {
                 string qry3 = @"select Name from tblCustomerV1 Where Id=@CustId and IsDeleted=0;";
                 var custname = "";

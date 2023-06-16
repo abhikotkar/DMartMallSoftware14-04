@@ -7,6 +7,16 @@
 <h1>Edit Customer</h1>
 
 <hr />
+
+
+@if (TempData["EditCustomerFail"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["EditCustomerFail"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
 <div class="row">
     <div class="col-md-4 d-block m-auto">
         <form asp-action="EditCustomer">
