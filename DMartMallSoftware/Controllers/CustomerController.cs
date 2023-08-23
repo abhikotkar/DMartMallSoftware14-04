@@ -421,7 +421,7 @@ namespace DMartMallSoftware.Controllers
             try
             {
                 List<UnitModel> unit = new List<UnitModel>();
-                unit = cd.LoadUnit().ToList();
+                unit = cd.LoadUnit1().ToList();
                 unit.Insert(0, new UnitModel { Id = 0, Unit = "Please Select" });
                 ViewBag.UnitTypes1 = unit;
             }

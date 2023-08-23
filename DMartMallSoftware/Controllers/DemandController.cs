@@ -31,12 +31,12 @@ namespace DMartMallSoftware.Controllers
                 int result = dd.AddDemand(demand);
                 if (result == 1)
                 {
-                    TempData["UpdateDemand"] = "Demand Updated Successfully.";
+                    TempData["UpdateDemand"] = "Request Updated Successfully.";
                     return RedirectToAction("ShowAllDemandsForStaff", "Demand");
                 }
                 else
                 {
-                    TempData["AddDemand"] = "Demand Added Successfully.";
+                    TempData["AddDemand"] = "Request Send Successfully.";
                     return RedirectToAction("ShowAllDemandsForStaff", "Demand");
                 }
 

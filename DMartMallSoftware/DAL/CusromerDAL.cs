@@ -1568,5 +1568,28 @@ namespace DMartMallSoftware.DAL
             con.Close();
             return unit;
         }
+        public List<UnitModel> LoadUnit1()
+        {
+            List<UnitModel> unit = new List<UnitModel>();
+            string qry = "select distinct UnitId as Id,Unit from tblStock inner join tblUnit on tblStock.UnitId=tblUnit.Id where tblStock.IsDeleted=0";
+            cmd = new SqlCommand(qry, con);
+            con.Open();
+            dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    unit.Add(new UnitModel
+                    {
+                        Id = dr.GetInt32("Id"),
+                        Unit = dr.GetString("Unit")
+                    });
+                }
+
+
+            }
+            con.Close();
+            return unit;
+        }
     }
 }

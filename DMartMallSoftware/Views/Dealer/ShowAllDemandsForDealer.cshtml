@@ -6,6 +6,16 @@
 
 <h1>Show All Demand</h1>
 <hr />
+
+
+@if (TempData["AcceptDemand"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["AcceptDemand"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
 <div class="row">
     <div class="col-md-12">
         <form method="get" action="ShowAllDemandsForDealer">
@@ -97,7 +107,7 @@
                     @Html.DisplayFor(modelItem => item.ModifiedDate)
                 </td>
                 <td>
-                    @if (item.StatusId == 1 || item.StatusId == 9 )
+                    @if (item.StatusId == 1 || item.StatusId == 9)
                     {
                         @Html.ActionLink("Delete", "DeleteDemand", new { Id=item.Id }, new{ @class="btn btn-danger"})
                         <span>&nbsp;</span>
@@ -107,7 +117,7 @@
                     {
                     }
                     else if (item.StatusId == 4)
-                    {  
+                    {
                         @Html.ActionLink("Confirm", "ConfirmByDealer", new { Id=item.Id }, new{ @class="btn btn-primary"})
                         <span>&nbsp;</span>
                         @Html.ActionLink("Pay Again", "PayAgain", new { Id=item.Id }, new{ @class="btn btn-success"})
@@ -124,13 +134,13 @@
                     {
                         @Html.ActionLink("Delete", "DeleteDemand", new { Id = item.Id }, new { @class = "btn btn-danger" })
                     }
-                  
 
-                  
+
+
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-              
+
