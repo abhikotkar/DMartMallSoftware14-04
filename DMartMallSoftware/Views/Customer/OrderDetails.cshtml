@@ -98,8 +98,27 @@
                                     {
                                         <td>
                                             @Html.ActionLink("Edit", "EditOrderItem", new { Id=item.Id,CId=Model.Id }, new{ @class="btn btn-primary"})
+                                            @{
+                                                var x = ("xyz" + item.Id).ToString();
+                                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Remove</button>
+                                                <div class="modal" id="@x">
+                                                    <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header ">
+                                                                <b> Delete Staff Member?</b>
+                                                                <button class="btn-close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h4 class="text-warning ">Are You Sure To Remove Order Item @Html.DisplayFor(modelItem => item.Name)?</h4>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                @Html.ActionLink("Remove", "RemoveCartItem", new { Id=item.Id,CId=Model.Id }, new{ @class="btn btn-danger"})
+                                                            </div>
+                                                        </div>
 
-                                            @Html.ActionLink("Remove", "RemoveCartItem", new { Id=item.Id,CId=Model.Id }, new{ @class="btn btn-danger"})
+                                                    </div>
+                                                </div>
+                                            }
 
                                         </td>
                                     }
