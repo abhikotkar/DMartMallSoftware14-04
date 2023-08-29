@@ -18,11 +18,11 @@ namespace DMartMallSoftware.Controllers
         public ActionResult ShowAllDemandsForDealer(string Name, int status)
         {
             Loadst();
-            var model = dd.ShowAllDemandsForDealer( Name,  status);
+            var model = dd.ShowAllDemandsForDealer(Name, status);
             return View(model);
         }
 
-        public ActionResult DeleteDemand(int Id)
+        /*public ActionResult DeleteDemand(int Id)
         {
             var model = dd.GetDemandById(Id);
             return View(model);
@@ -30,7 +30,7 @@ namespace DMartMallSoftware.Controllers
 
         // POST: StockController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]*/
         [ActionName("DeleteDemand")]
         public ActionResult DeleteConfirm(int Id)
         {
@@ -39,15 +39,20 @@ namespace DMartMallSoftware.Controllers
                 int result = dd.DeleteDemand(Id);
                 if (result == 1)
                 {
+                    TempData["DeleteDemand"] = "Request Deleted Successfully.";
                     return RedirectToAction(nameof(ShowAllDemandsForDealer));
                 }
                 else
-                    return View();
+                {
+                    TempData["DeleteDemandError"] = "Errror Occured When Delete Request!";
+                    return RedirectToAction(nameof(ShowAllDemandsForDealer));
+                }
             }
             catch
             {
                 return View();
             }
+
         }
 
         public ActionResult AcceptRequest(int Id)
@@ -58,23 +63,87 @@ namespace DMartMallSoftware.Controllers
 
         public ActionResult ConfirmByDealer(int Id)
         {
-            var model = dd.ConfirmByDealer(Id);
-            return RedirectToAction("ShowAllDemandsForDealer", "Dealer");
+            try
+            {
+                int result = dd.ConfirmByDealer(Id);
+                if (result == 1)
+                {
+                    TempData["ConfirmByDealer"] = "Payment Confirm Successfully.";
+                    return RedirectToAction(nameof(ShowAllDemandsForDealer));
+                }
+                else
+                {
+                    TempData["ConfirmByDealerError"] = "Errror Occured When Confirm Payment!";
+                    return RedirectToAction(nameof(ShowAllDemandsForDealer));
+                }
+            }
+            catch
+            {
+                return View();
+            }
         }
         public ActionResult PayAgain(int Id)
         {
-            var model = dd.PayAgain(Id);
-            return RedirectToAction("ShowAllDemandsForDealer", "Dealer");
+            try
+            {
+                int result = dd.PayAgain(Id);
+                if (result == 1)
+                {
+                    TempData["PayAgain"] = "Payment Not Received.";
+                    return RedirectToAction(nameof(ShowAllDemandsForDealer));
+                }
+                else
+                {
+                    TempData["PayAgainError"] = "Errror Occured When Confirm Payment!";
+                    return RedirectToAction(nameof(ShowAllDemandsForDealer));
+                }
+            }
+            catch
+            {
+                return View();
+            }
         }
         public ActionResult ShippingByDealer(int Id)
         {
-            var model = dd.ShippingByDealer(Id);
-            return RedirectToAction("ShowAllDemandsForDealer", "Dealer");
+            try
+            {
+                int result = dd.ShippingByDealer(Id);
+                if (result == 1)
+                {
+                    TempData["ShippingByDealer"] = "Order Shipped Successfully.";
+                    return RedirectToAction(nameof(ShowAllDemandsForDealer));
+                }
+                else
+                {
+                    TempData["ShippingByDealerError"] = "Errror Occured When Shipped Status!";
+                    return RedirectToAction(nameof(ShowAllDemandsForDealer));
+                }
+            }
+            catch
+            {
+                return View();
+            }
         }
         public ActionResult DeliveredByDealer(int Id)
         {
-            var model = dd.DeliveredByDealer(Id);
-            return RedirectToAction("ShowAllDemandsForDealer", "Dealer");
+            try
+            {
+                int result = dd.DeliveredByDealer(Id);
+                if (result == 1)
+                {
+                    TempData["DeliveredByDealer"] = "Order Deliverd Successfully.";
+                    return RedirectToAction(nameof(ShowAllDemandsForDealer));
+                }
+                else
+                {
+                    TempData["DeliveredByDealerError"] = "Errror Occured When Deliverd Status!";
+                    return RedirectToAction(nameof(ShowAllDemandsForDealer));
+                }
+            }
+            catch
+            {
+                return View();
+            }
         }
 
 
@@ -88,10 +157,14 @@ namespace DMartMallSoftware.Controllers
                 int result = dd.AcceptRequest(demand);
                 if (result == 1)
                 {
+                    TempData["AcceptRequest"] = "Request Accept Successfully.";
                     return RedirectToAction(nameof(ShowAllDemandsForDealer));
                 }
                 else
-                    return View();
+                {
+                    TempData["AcceptRequestError"] = "Errror Occured When Accept Request!";
+                    return RedirectToAction(nameof(ShowAllDemandsForDealer));
+                }
             }
             catch
             {

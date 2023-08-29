@@ -52,7 +52,14 @@ namespace DMartMallSoftware.DAL
                     p.PayStatusId = Convert.ToInt32(dr["PayStatusId"]);
                     p.PayStatus = dr["PayStatus"].ToString();
                     p.StatusId = Convert.ToInt32(dr["StatusId"]);
-                    p.Status = dr["Status"].ToString();
+                    if (p.StatusId == 12)
+                    {
+                        p.Status = "Delivered";
+                    }
+                    else
+                    {
+                        p.Status = dr["Status"].ToString();
+                    }
                     p.CreatedDate = (DateTime)dr["CreatedDate"];
                     p.ModifiedDate = (DateTime)dr["ModifiedDate"];
                     plist.Add(p);
@@ -113,7 +120,7 @@ namespace DMartMallSoftware.DAL
             con.Close();
             return result;
         }
-        
+
         public int PayAgain(int Id)
         {
             string qry = "update tblDemand set PayStatusId=1, StatusId=10,ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate where Id=@Id";
@@ -187,7 +194,7 @@ namespace DMartMallSoftware.DAL
                 }
             }
             con.Close();
-            demand.Total=demand.Price* quantity;
+            demand.Total = demand.Price * quantity;
             string qry = @"update tblDemand set Price=@Price,Total=@Total,StatusId=2,ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate where Id=@Id";
             cmd = new SqlCommand(qry, con);
             demand.ModifiedDate = DateTime.Now;

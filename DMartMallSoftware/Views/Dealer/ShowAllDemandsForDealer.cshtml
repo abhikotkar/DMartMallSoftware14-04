@@ -16,6 +16,86 @@
         </button>
     </div>
 }
+@if (TempData["AcceptRequest"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["AcceptRequest"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["AcceptRequestError"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["AcceptRequestError"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["ConfirmByDealer"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["ConfirmByDealer"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["ConfirmByDealerError"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["ConfirmByDealerError"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["PayAgain"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["PayAgain"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["PayAgainError"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["PayAgainError"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["ShippingByDealer"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["ShippingByDealer"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["ShippingByDealerError"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["ShippingByDealerError"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["DeliveredByDealer"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["DeliveredByDealer"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["DeliveredByDealerError"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["DeliveredByDealerError"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
 <div class="row">
     <div class="col-md-12">
         <form method="get" action="ShowAllDemandsForDealer">
@@ -109,7 +189,24 @@
                 <td>
                     @if (item.StatusId == 1 || item.StatusId == 9)
                     {
-                        @Html.ActionLink("Delete", "DeleteDemand", new { Id=item.Id }, new{ @class="btn btn-danger"})
+                        var x = ("xyz1" + item.Id).ToString();
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
+                        <div class="modal" id="@x">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        <b> Delete Request?</b>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-warning ">Are You Sure To Delete Request @Html.DisplayFor(modelItem => item.Name) ?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Delete", "DeleteDemand", new { Id=item.Id }, new{ @class="btn btn-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <span>&nbsp;</span>
                         @Html.ActionLink("Accept Request", "AcceptRequest", new { Id=item.Id }, new{ @class="btn btn-primary"})
                     }
@@ -118,21 +215,85 @@
                     }
                     else if (item.StatusId == 4)
                     {
-                        @Html.ActionLink("Confirm", "ConfirmByDealer", new { Id=item.Id }, new{ @class="btn btn-primary"})
+                        var y = ("apqr2" + item.Id).ToString();
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@y">Confirm</button>
+                        <div class="modal" id="@y">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        <b> Amount Received?</b>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-success ">Are You Sure Receive Rs. @Html.DisplayFor(modelItem => item.Total) ?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Confirm", "ConfirmByDealer", new { Id=item.Id }, new{ @class="btn btn-primary"})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <span>&nbsp;</span>
-                        @Html.ActionLink("Pay Again", "PayAgain", new { Id=item.Id }, new{ @class="btn btn-success"})
+                        var x = ("apqr3" + item.Id).ToString();
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#@x">Pay Again</button>
+                        <div class="modal" id="@x">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        <b> Amount Not Received?</b>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-danger">Are You Sure Amount Not Receive ?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Yes", "PayAgain", new { Id=item.Id }, new{ @class="btn btn-success"})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                     else if (item.StatusId == 5)
                     {
-                        @Html.ActionLink("Shipping", "ShippingByDealer", new { Id=item.Id }, new{ @class="btn btn-primary"})
+                        var x = ("apqr4" + item.Id).ToString();
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@x">Shipping</button>
+                        <div class="modal" id="@x">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        <b> Confirm Shipping?</b>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-success">Are You Sure The Product @Html.DisplayFor(modelItem => item.Name) Is Shipped Successfully ?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Shipping", "ShippingByDealer", new { Id=item.Id }, new{ @class="btn btn-primary"})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                     else if (item.StatusId == 6 || item.StatusId == 11)
                     {
-                        @Html.ActionLink("Delivered", "DeliveredByDealer", new { Id=item.Id }, new{ @class="btn btn-success"})
-                    }
-                    else if (item.StatusId == 8 || item.StatusId == 12)
-                    {
-                        @Html.ActionLink("Delete", "DeleteDemand", new { Id = item.Id }, new { @class = "btn btn-danger" })
+                        var x = ("apqr5" + item.Id).ToString();
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#@x">Delivered</button>
+                        <div class="modal" id="@x">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        <b> Confirm Delivery?</b>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-success">Are You Sure The Product @Html.DisplayFor(modelItem => item.Name) Is Delivered Successfully ?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Delivered", "DeliveredByDealer", new { Id=item.Id }, new{ @class="btn btn-success"})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
 
 

@@ -57,24 +57,90 @@ namespace DMartMallSoftware.Controllers
 
         public ActionResult RejectOffer(int Id)
         {
-            var model = dd.RejectOffer(Id);
-            return RedirectToAction("ShowAllDemandsForStaff", "Demand");
+            try
+            {
+                int result = dd.RejectOffer(Id);
+                if (result == 1)
+                {
+                    TempData["RejectDemand"] = "Request Rejected Successfully.";
+                    return RedirectToAction(nameof(ShowAllDemandsForStaff));
+                }
+                else
+                {
+                    TempData["RejectDemandError"] = "Errror Occured When Reject Request!";
+                    return RedirectToAction(nameof(ShowAllDemandsForStaff));
+                }
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         public ActionResult ConfirmByAdmin(int Id)
         {
-            var model = dd.ConfirmByAdmin(Id);
-            return RedirectToAction("ShowAllDemandsForStaff", "Demand");
+            try
+            {
+                int result = dd.ConfirmByAdmin(Id);
+                if (result == 1)
+                {
+                    TempData["ConfirmByAdmin"] = "Payment Successfully Done.";
+                    return RedirectToAction(nameof(ShowAllDemandsForStaff));
+                }
+                else
+                {
+                    TempData["ConfirmByAdminError"] = "Errror Occured When Payment!";
+                    return RedirectToAction(nameof(ShowAllDemandsForStaff));
+                }
+            }
+            catch
+            {
+                return View();
+            }
         }
         public ActionResult NotDelinered(int Id)
         {
+            try
+            {
+                int result = dd.NotDelinered(Id);
+                if (result == 1)
+                {
+                    TempData["NotDelinered"] = "Order Not Deliverd.";
+                    return RedirectToAction(nameof(ShowAllDemandsForStaff));
+                }
+                else
+                {
+                    TempData["NotDelineredError"] = "Errror Occured When Order Deliverd Status!";
+                    return RedirectToAction(nameof(ShowAllDemandsForStaff));
+                }
+            }
+            catch
+            {
+                return View();
+            }
             var model = dd.NotDelinered(Id);
             return RedirectToAction("ShowAllDemandsForStaff", "Demand");
         }
         public ActionResult DeliveredByAdmin(int Id)
         {
-            var model = dd.DeliveredByAdmin(Id);
-            return RedirectToAction("ShowAllDemandsForStaff", "Demand");
+            try
+            {
+                int result = dd.DeliveredByAdmin(Id);
+                if (result == 1)
+                {
+                    TempData["DeliveredByAdmin"] = "Order Delivered Successfully.";
+                    return RedirectToAction(nameof(ShowAllDemandsForStaff));
+                }
+                else
+                {
+                    TempData["DeliveredByAdminError"] = "Errror Occured When Order Deliverd!";
+                    return RedirectToAction(nameof(ShowAllDemandsForStaff));
+                }
+            }
+            catch
+            {
+                return View();
+            }
         }
         public ActionResult AddToStock(int Id)
         {
@@ -130,12 +196,12 @@ namespace DMartMallSoftware.Controllers
                 int result = dd.DeleteDemand(Id);
                 if (result == 1)
                 {
-                    TempData["DeleteDemand"] = "Demand Deleted Successfully.";
+                    TempData["DeleteDemand"] = "Request Deleted Successfully.";
                     return RedirectToAction(nameof(ShowAllDemandsForStaff));
                 }
                 else
                 {
-                    TempData["DeleteDemandError"] = "Errror Occured When Delete Demand!";
+                    TempData["DeleteDemandError"] = "Errror Occured When Delete Request!";
                     return RedirectToAction(nameof(ShowAllDemandsForStaff));
                 }
             }

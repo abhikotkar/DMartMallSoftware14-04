@@ -38,8 +38,72 @@
 }
 @if (TempData["DeleteDemandError"] != null)
 {
-    <div class="alert alert-success">
+    <div class="alert alert-danger">
         <strong>Unsuccess !</strong> @TempData["DeleteDemandError"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["RejectDemand"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["RejectDemand"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["RejectDemandError"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["RejectDemandError"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["ConfirmByAdmin"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["ConfirmByAdmin"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["ConfirmByAdminError"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["ConfirmByAdminError"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["DeliveredByAdmin"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Success !</strong> @TempData["DeliveredByAdmin"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["DeliveredByAdminError"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["DeliveredByAdminError"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["NotDelinered"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success !</strong> @TempData["NotDelinered"]
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+@if (TempData["NotDelineredError"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Unsuccess !</strong> @TempData["NotDelineredError"]
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert">
         </button>
     </div>
@@ -145,7 +209,7 @@
                     @Html.DisplayFor(modelItem => item.ModifiedDate)
                 </td>
                 <td>
-                    @if (item.StatusId == 1 || item.StatusId == 3 || item.StatusId == 9 || item.StatusId == 12)
+                    @if (item.StatusId == 1 || item.StatusId == 3 || item.StatusId == 9)
                     {
                         var x = ("ab" + item.Id).ToString();
                         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
@@ -153,7 +217,7 @@
                             <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header ">
-                                        Delete Demand?
+                                        <b> Delete Demand?</b>
                                         <button class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body">
@@ -168,18 +232,86 @@
                     }
                     else if (item.StatusId == 2 || item.StatusId == 10)
                     {
-                        @Html.ActionLink("Reject", "RejectOffer", new { Id = item.Id }, new { @class = "btn btn-danger" })
+                        var x = ("apqr" + item.Id).ToString();
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Reject</button>
+                        <div class="modal" id="@x">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        <b> Reject Request?</b>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-warning ">Are You Sure To Reject Request @Html.DisplayFor(modelItem => item.Name) ?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Reject", "RejectOffer", new { Id = item.Id }, new { @class = "btn btn-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <span>&nbsp;</span>
-                        @Html.ActionLink("Pay", "ConfirmByAdmin", new { Id = item.Id }, new { @class = "btn btn-primary" })
+                        var y = ("apqr1" + item.Id).ToString();
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@y">Pay</button>
+                        <div class="modal" id="@y">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        <b> Pay Amount?</b>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-warning ">Are You Sure To Pay Rs. @Html.DisplayFor(modelItem => item.Total) ?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Pay", "ConfirmByAdmin", new { Id = item.Id }, new { @class = "btn btn-primary" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                     else if (item.StatusId == 4 || item.StatusId == 5 || item.StatusId == 6)
                     {
                     }
                     else if (item.StatusId == 7)
                     {
-                        @Html.ActionLink("Delivered", "DeliveredByAdmin", new { Id = item.Id }, new { @class = "btn btn-success" })
+                        var x = ("apqr6" + item.Id).ToString();
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@x">Delivered</button>
+                        <div class="modal" id="@x">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        <b> Confirm Delivery?</b>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-success ">Are You Sure Product @Html.DisplayFor(modelItem => item.Name) Delivered Successfully?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Delivered", "DeliveredByAdmin", new { Id = item.Id }, new { @class = "btn btn-primary" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <span>&nbsp;</span>
-                        @Html.ActionLink("Not Delivered", "NotDelinered",new { Id = item.Id }, new { @class = "btn btn-danger" })
+                        var y = ("apqr7" + item.Id).ToString();
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@y">Not Delivered</button>
+                        <div class="modal" id="@y">
+                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        <b> Confirm Delivery?</b>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-warning ">Are You Sure Product @Html.DisplayFor(modelItem => item.Name) Not Delivered ?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @Html.ActionLink("Not Delivered", "NotDelinered",new { Id = item.Id }, new { @class = "btn btn-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                     else if (item.StatusId == 8)
                     {
