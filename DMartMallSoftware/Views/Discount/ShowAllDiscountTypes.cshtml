@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "ShowAllDiscountTypes";
+    var item1 = Model.ToList();
 }
 
 <h1>All Discount Types</h1>
@@ -47,63 +48,79 @@
         </button>
     </div>
 }
-<div class="col-md-6 d-block m-auto">
-    <table class="table table-bordered table-striped">
+
+@if (item1.Count == 0)
+{
+    <table class="table table-bordered table-striped text-center alert-danger ">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.SrNo)
+                    <h3 class="text-danger">Record Not Found !</h3>
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DiscountPerc)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AddedBy)
-                </th>
-                <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SrNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DiscountPerc)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AddedBy)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "EditDiscountType", new { Id=item.Id  }, new{ @class="btn btn-primary"})
-                        @{
-                            var x = ("abcd" + item.Id).ToString();
-                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
-                            <div class="modal" id="@x">
-                                <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <div class="modal-header ">
-                                            <b>Delete Discount Type?</b>
-                                            <button class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <h4 class="text-warning ">Are You Sure To Delete Discount Type @Html.DisplayFor(modelItem => item.DiscountPerc) Percent?</h4>
-                                        </div>
-                                        <div class="modal-footer">
-                                            @Html.ActionLink("Delete", "DeleteConfirm", new { Id=item.Id }, new{ @class="btn btn-danger" })
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        }
-                    </td>
-
-                </tr>
-            }
-        </tbody>
     </table>
-</div>
+}
+else
+{
+    <div class="col-md-6 d-block m-auto">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SrNo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DiscountPerc)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AddedBy)
+                    </th>
+                    @*<th>Actions</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SrNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DiscountPerc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AddedBy)
+                        </td>
+                        @*
+                <td>
+                @Html.ActionLink("Edit", "EditDiscountType", new { Id=item.Id  }, new{ @class="btn btn-primary"})
+                @{
+                var x = ("abcd" + item.Id).ToString();
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
+                <div class="modal" id="@x">
+                <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                <div class="modal-header ">
+                <b>Delete Discount Type?</b>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                <h4 class="text-warning ">Are You Sure To Delete Discount Type @Html.DisplayFor(modelItem => item.DiscountPerc) Percent?</h4>
+                </div>
+                <div class="modal-footer">
+                @Html.ActionLink("Delete", "DeleteConfirm", new { Id=item.Id }, new{ @class="btn btn-danger" })
+                </div>
+                </div>
 
+                </div>
+                </div>
+                }
+                </td>
+                *@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "AllCustomers";
+    var item1 = Model.ToList();
 }
 
 <h1>Show All Customers</h1>
@@ -65,70 +66,85 @@
 </div>
 <br />
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SrNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MobileNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (item1.Count == 0)
+{
+    <table class="table table-bordered table-striped text-center alert-danger ">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SrNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MobileNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "EditCustomer", new { Id=item.Id }, new{ @class="btn btn-primary"})
-
-                    @Html.ActionLink("Details", "CustomerDetails", new { CustId=item.Id }, new{ @class="btn btn-success"})
-
-                    @{
-                        var x = ("abcde" + item.Id).ToString();
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
-                        <div class="modal" id="@x">
-                            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header ">
-                                        <b>Delete Customer?</b>
-                                        <button class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h4 class="text-warning ">Are You Sure To Delete Customer @Html.DisplayFor(modelItem => item.Name)?</h4>
-                                    </div>
-                                    <div class="modal-footer">
-                                        @Html.ActionLink("Delete", "CancelCustomer", new { Id=item.Id }, new{ @class="btn btn-danger" })
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    }
-
-                </td>
+                <th>
+                    <h3 class="text-danger">Record Not Found !</h3>
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+    </table>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.SrNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MobileNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SrNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MobileNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditCustomer", new { Id=item.Id }, new{ @class="btn btn-primary"})
+
+                        @Html.ActionLink("Details", "CustomerDetails", new { CustId=item.Id }, new{ @class="btn btn-success"})
+
+                        @{
+                            var x = ("abcde" + item.Id).ToString();
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
+                            <div class="modal" id="@x">
+                                <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header ">
+                                            <b>Delete Customer?</b>
+                                            <button class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h4 class="text-warning ">Are You Sure To Delete Customer @Html.DisplayFor(modelItem => item.Name)?</h4>
+                                        </div>
+                                        <div class="modal-footer">
+                                            @Html.ActionLink("Delete", "CancelCustomer", new { Id=item.Id }, new{ @class="btn btn-danger" })
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 

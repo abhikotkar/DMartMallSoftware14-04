@@ -16,6 +16,10 @@ namespace DMartMallSoftware.Controllers
         }
         public ActionResult ShowAllDiscountTypes()
         {
+            if ((HttpContext.Session.GetString("Id")) == null)
+            {
+                return RedirectToAction("SignIn", "Register");
+            }
             var model = dd.GetDiscountType();
             return View(model);
         }

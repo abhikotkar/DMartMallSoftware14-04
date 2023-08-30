@@ -17,6 +17,10 @@ namespace DMartMallSoftware.Controllers
         }
         public ActionResult ShowAllStock(string Name)
         {
+            if ((HttpContext.Session.GetString("Id")) == null)
+            {
+                return RedirectToAction("SignIn", "Register");
+            }
             var model = ps.GetStock(Name);
             return View(model);
         }

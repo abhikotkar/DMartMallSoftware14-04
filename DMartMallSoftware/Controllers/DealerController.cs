@@ -17,6 +17,10 @@ namespace DMartMallSoftware.Controllers
 
         public ActionResult ShowAllDemandsForDealer(string Name, int status)
         {
+            if ((HttpContext.Session.GetString("Id")) == null)
+            {
+                return RedirectToAction("SignIn", "Register");
+            }
             Loadst();
             var model = dd.ShowAllDemandsForDealer(Name, status);
             return View(model);

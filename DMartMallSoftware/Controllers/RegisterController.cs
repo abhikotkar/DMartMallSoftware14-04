@@ -18,12 +18,15 @@ namespace DMartMallSoftware.Controllers
 
         public ActionResult SignIn()
         {
+            if ((HttpContext.Session.GetString("Id")) != null)
+            {
+                HttpContext.Session.Clear();
+            }
             return View();
         }
 
         [HttpPost]
         public IActionResult SignIn(StaffModel staff)
-
         {
 
             StaffModel user = rd.UserLogin(staff);
@@ -35,7 +38,6 @@ namespace DMartMallSoftware.Controllers
                 HttpContext.Session.SetString("UserTypeId", user.UserTypeId.ToString());
                 HttpContext.Session.SetString("Email", user.Email.ToString());
                 HttpContext.Session.SetString("Id", user.Id.ToString());
-
                 return RedirectToAction("Index", "Home");
                 /* }
                  else if (user.UserTypeId != 1)
@@ -114,9 +116,20 @@ namespace DMartMallSoftware.Controllers
         //Show all Staff Details
         public ActionResult ShowAllStaff(string Name, int TextId, string IsConfirmed)
         {
-            LoadDDl();
-            var model = rd.GetStaff(Name, TextId, IsConfirmed);
-            return View(model);
+            try
+            {
+                if ((HttpContext.Session.GetString("Id")) == null)
+                {
+                    return RedirectToAction("SignIn", "Register");
+                }
+                LoadDDl();
+                var model = rd.GetStaff(Name, TextId, IsConfirmed);
+                return View(model);
+            }
+            catch
+            {
+                return View();
+            }
         }
 
 
@@ -159,6 +172,10 @@ namespace DMartMallSoftware.Controllers
 
         public ActionResult EditMyProfile(int Id)
         {
+            if ((HttpContext.Session.GetString("Id")) == null)
+            {
+                return RedirectToAction("SignIn", "Register");
+            }
             LoadQDl();
             var model = rd.GetStaffById(Id);
             return View(model);
@@ -245,6 +262,10 @@ namespace DMartMallSoftware.Controllers
 
         public ActionResult ChangePassword()
         {
+            if ((HttpContext.Session.GetString("Id")) == null)
+            {
+                return RedirectToAction("SignIn", "Register");
+            }
             return View();
         }
 

@@ -15,7 +15,10 @@ namespace DMartMallSoftware.Controllers
 
         public IActionResult Index()
         {
-
+            if ((HttpContext.Session.GetString("Id")) == null)
+            {
+                return RedirectToAction("SignIn", "Register");
+            }
             return View();
         }
 

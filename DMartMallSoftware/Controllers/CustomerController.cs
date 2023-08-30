@@ -212,7 +212,10 @@ namespace DMartMallSoftware.Controllers
 
         public ActionResult AllCustomers(string? searchText)
         {
-
+            if ((HttpContext.Session.GetString("Id")) == null)
+            {
+                return RedirectToAction("SignIn", "Register");
+            }
             var model = cd.GetAllCustomers(searchText);
             return View(model);
         }
