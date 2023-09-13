@@ -5,7 +5,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(10000);
+    options.IdleTimeout = TimeSpan.FromSeconds(100);
 }
     ); ;
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

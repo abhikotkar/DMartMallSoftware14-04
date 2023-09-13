@@ -214,6 +214,7 @@ namespace DMartMallSoftware.Controllers
         {
             if ((HttpContext.Session.GetString("Id")) == null)
             {
+                TempData["SessionExp"] = "Logout! Session Expired...";
                 return RedirectToAction("SignIn", "Register");
             }
             var model = cd.GetAllCustomers(searchText);

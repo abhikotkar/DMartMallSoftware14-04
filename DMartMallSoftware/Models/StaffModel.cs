@@ -6,7 +6,7 @@ using System.Net;
 
 namespace DMartMallSoftware.Models
 {
-    public class StaffModel:BaseModel
+    public class StaffModel : BaseModel
     {
         [Key]
         public int Id { get; set; }
@@ -17,7 +17,7 @@ namespace DMartMallSoftware.Models
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
-                          
+
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         public string Email { get; set; }

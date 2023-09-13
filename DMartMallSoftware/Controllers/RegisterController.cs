@@ -21,6 +21,7 @@ namespace DMartMallSoftware.Controllers
             if ((HttpContext.Session.GetString("Id")) != null)
             {
                 HttpContext.Session.Clear();
+                TempData["SessionExp"] = "Logout! Session Expired...";
             }
             return View();
         }
@@ -120,6 +121,7 @@ namespace DMartMallSoftware.Controllers
             {
                 if ((HttpContext.Session.GetString("Id")) == null)
                 {
+                    TempData["SessionExp"] = "Logout! Session Expired...";
                     return RedirectToAction("SignIn", "Register");
                 }
                 LoadDDl();
@@ -174,6 +176,7 @@ namespace DMartMallSoftware.Controllers
         {
             if ((HttpContext.Session.GetString("Id")) == null)
             {
+                TempData["SessionExp"] = "Logout! Session Expired...";
                 return RedirectToAction("SignIn", "Register");
             }
             LoadQDl();
@@ -264,6 +267,7 @@ namespace DMartMallSoftware.Controllers
         {
             if ((HttpContext.Session.GetString("Id")) == null)
             {
+                TempData["SessionExp"] = "Logout! Session Expired...";
                 return RedirectToAction("SignIn", "Register");
             }
             return View();

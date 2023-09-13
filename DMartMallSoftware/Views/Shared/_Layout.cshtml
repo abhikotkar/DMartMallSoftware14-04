@@ -69,7 +69,7 @@
                             }
                             else if (int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 2)
                             {
-                                <li class="nav-item" style="padding-left:50px">
+                                <li class="nav-item" style="padding-left:100px">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Discount" asp-action="ShowAllDiscountTypes"><p class="text-white">Discount Types</p></a>
                                 </li>
                                 <li class="nav-item" style="padding-left:50px">
@@ -81,7 +81,7 @@
                                 <li class="nav-item" style="padding-left:50px">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="AllCustomers"><p class="text-white">Customers</p></a>
                                 </li>
-                                <li class="nav-item dropdown" style="margin-left:400px">
+                                <li class="nav-item dropdown" style="margin-left:450px">
                                     <a class="nav-link dropdown-toggle float-end " asp-area="" data-bs-toggle="dropdown">
                                         <h4 class="text-warning float-end">
                                             Welcome: @HttpContextAccessor.HttpContext.Session.GetString("Name")
@@ -109,13 +109,13 @@
                             }
                             else if (int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 3)
                             {
-                                <li class="nav-item" style="padding-left:50px">
+                                <li class="nav-item" style="padding-left:100px">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="ShowAllStock"><p class="text-white">Stock</p></a>
                                 </li>
                                 <li class="nav-item" style="padding-left:50px">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="AllCustomers"><p class="text-white">Customers</p></a>
                                 </li>
-                                <li class="nav-item dropdown" style="margin-left:500px">
+                                <li class="nav-item dropdown" style="margin-left:780px">
                                     <a class="nav-link dropdown-toggle float-end " asp-area="" data-bs-toggle="dropdown">
                                         <h4 class="text-warning float-end">
                                             Welcome: @HttpContextAccessor.HttpContext.Session.GetString("Name")
@@ -143,10 +143,10 @@
                             }
                             else if (int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 4)
                             {
-                                <li class="nav-item" style="padding-left:50px">
+                                <li class="nav-item" style="padding-left:100px">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="ShowAllStock"><p class="text-white">Stock</p></a>
                                 </li>
-                                <li class="nav-item dropdown" style="margin-left:550px">
+                                <li class="nav-item dropdown" style="margin-left:900px">
                                     <a class="nav-link dropdown-toggle float-end " asp-area="" data-bs-toggle="dropdown">
                                         <h4 class="text-warning float-end">
                                             Welcome: @HttpContextAccessor.HttpContext.Session.GetString("Name")
@@ -225,10 +225,10 @@
                         @if (String.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("Id")))
                         {
 
-                            <li class="nav-item ">
+                            <li class="nav-item " style="margin-left:100px">
                                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><h1 class="text-white">D-Mart Mall Software</h1></a>
                             </li>
-                            <li class="nav-item " style="margin-left:800px">
+                            <li class="nav-item " style="margin-left:700px">
                                 <a class="nav-link" asp-area="" asp-controller="Register" asp-action="SignIn"><p class="text-white btn btn-primary">SignIn</p></a>
                             </li>
                             <li class="nav-item ">

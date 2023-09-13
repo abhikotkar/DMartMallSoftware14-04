@@ -89,7 +89,12 @@ else
                 <th>
                     @Html.DisplayNameFor(model => model.DiscountPerc) <span>(in %)</span>
                 </th>
-                <th>Action</th>
+                @if (int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 1 ||
+               int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 2 ||
+               int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 5)
+                {
+                    <th>Action</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -114,9 +119,14 @@ else
                     <td>
                         @Html.DisplayFor(modelItem => item.DiscountPerc)
                     </td>
-                    <td>
-                        @Html.ActionLink("Edit", "EditStock", new { Id=item.Id  }, new{ @class="btn btn-primary"})
-                        @*@{
+                    @if (int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 1 ||
+                   int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 2 ||
+                   int.Parse(HttpContextAccessor.HttpContext.Session.GetString("UserTypeId")) == 5)
+                    {
+                        <td>
+                            @Html.ActionLink("Edit", "EditStock", new { Id=item.Id  }, new{ @class="btn btn-primary"})
+
+                            @*@{
                 var x = ("abcde" + item.Id).ToString();
                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@x">Delete</button>
                 <div class="modal" id="@x">
@@ -137,7 +147,8 @@ else
                 </div>
                 </div>
                 }*@
-                    </td>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

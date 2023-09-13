@@ -726,10 +726,10 @@ namespace DMartMallSoftware.DAL
             string qry = @"Select ROW_NUMBER() OVER(ORDER BY Id desc) as SrNo,Id,Name,MobileNo,Address
                                                                             from tblCustomerV1  where IsDeleted=0 
 			                                                                and (MobileNo like '%'+@MobileNo+'%' or @MobileNo is null ) 
-                                                                            and CreatedBy =@CreatedBy";
+                                                                            --and CreatedBy =@CreatedBy";
             cmd = new SqlCommand(qry, con);
             cmd.Parameters.AddWithValue("@MobileNo", MobileNo);
-            cmd.Parameters.AddWithValue("@CreatedBy", HttpContext.Session.GetString("Id"));
+            // cmd.Parameters.AddWithValue("@CreatedBy", HttpContext.Session.GetString("Id"));
             con.Open();
             dr = cmd.ExecuteReader();
             if (dr.HasRows)

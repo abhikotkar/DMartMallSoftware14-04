@@ -44,7 +44,21 @@
                             @Html.ActionLink("Add New", "AddItem","Customer", new { Id =  Model.Id }, new { @class = "btn btn-primary float-end mb-4" })
 
                         </p>
+                    } 
+                    @if (ctm.Count == 0)
+                    {
+                        <table class="table table-bordered table-striped text-center alert-danger ">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h3 class="text-danger">Record Not Found !</h3>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
                     }
+                    else
+                    {
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -175,6 +189,7 @@
                     </tr>
                     </tbody>
                     </table>
+                    }
                 </div>
             }
         </dd>
